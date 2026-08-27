@@ -1,0 +1,28 @@
+import sqlite3
+
+DB="database/examguard.db"
+
+def get_db():
+    connection = sqlite3.connect(DB)
+    return connection
+
+
+def init_db():
+    connection = get_db()
+
+
+
+    connection.execute( """
+
+        create table if not exists candidates(
+            id integer  primary key AUTOINCREMENT,
+            name text not null,
+            email text unique not null,
+            password text not null
+        )
+    
+    """
+
+    )
+    connection.commit()
+    connection.close()
