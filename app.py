@@ -75,7 +75,7 @@ def login():
 
         if candidate:
            # return "Login successful!"
-           session["candidate_id"]= candidate["id"]
+           session["candidate_id"]= candidate[0]
            #return "Login successful!"
            return render_template("dashboard.html")
         
