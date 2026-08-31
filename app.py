@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 from database import init_db , get_db
 
 app = Flask(__name__)
@@ -74,12 +74,29 @@ def login():
         connection.close()
 
         if candidate:
-            return "Login successful!"
-
+           # return "Login successful!"
+           session["candidate_id"]= candidate["id"]
+           #return "Login successful!"
+           return render_template("dashboard.html")
+        
         return "Invalid email or password"
 
     return render_template("login.html")
-            
+
+@app.route("/dashboard")
+def dashboard():
+    if "candidate_id" not in session:
+        return "please login first"
+
+
+    return render_template("dashboard.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return "logout successful"
+
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
