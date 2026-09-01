@@ -57,8 +57,8 @@ def register():
         connection.execute(
             """
             INSERT INTO candidates
-            (name, email, password)
-            VALUES (?, ?, ?)
+            (name, email, password, photo)
+            VALUES (?, ?, ?, ?)
             """,
             (name, email, hashed_password, photo_path)
         )
@@ -66,14 +66,12 @@ def register():
         connection.commit()
         connection.close()
         
-        return "registration successful"
-
-        print("name:", name)
-        print("email:", email)
-        print("password:", password)
+        #return "registration successful"
+        return redirect("/login")
+       
 
     return render_template("register.html")
-
+    
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -88,18 +86,18 @@ def login():
             """
             SELECT *
             FROM candidates
-            WHERE email = ? AND password = ?
+            WHERE email = ? 
             """,
-            (email, password)
+            (email, )
         ).fetchone()
 
         connection.close()
 
-        if candidate:
+        if candidate and check_password_hash(candidate["password"], password):
            # return "Login successful!"
            session["candidate_id"]= candidate["id"]
            #return "Login successful!"
-           return render_template("dashboard.html")
+           return redirect("/dashboard")
         
         return "Invalid email or password"
 
@@ -115,10 +113,10 @@ def dashboard():
 
 @app.route("/logout")
 def logout():
+
     session.clear()
-    return "logout successful"
+    return redirect("/login")
 
 
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
+   print(app.url_map)
