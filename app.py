@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, redirect
 from database import init_db , get_db
-from werkzeug.security import check_password_hash, generate_password_hash,check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import os
 
@@ -48,8 +48,8 @@ def register():
             return "please select a photo"
 
         os.makedirs(upload_folder, exist_ok=True)
-        filename=secure_filename(photo.filename)
-        photo.save=os.path.join(upload_folder, filename)
+        filename = secure_filename(photo.filename)
+        photo_path = os.path.join(upload_folder, filename)
         photo.save(photo_path)
 
         connection = get_db()
@@ -119,4 +119,5 @@ def logout():
 
 
 if __name__ == "__main__":
-   print(app.url_map)
+    print(app.url_map)
+    app.run(debug=True)
