@@ -6,7 +6,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = "examguard_secret_key"
-upload_folder = "static1/uploads"
+upload_folder = "static/uploads"
 
 print(app.url_map)
 
