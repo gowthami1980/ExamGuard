@@ -5,6 +5,13 @@ from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
+app.secret_key = "examguard_secret_key"
+upload_folder = "static/uploads"
+
+print(app.url_map)
+
+init_db()
+
 
 @app.route("/")
 def home():
@@ -40,15 +47,20 @@ def register():
         if not photo or photo.filename == "":
             return "please select a photo"
 
-        os.markdisk("")
+        os.makedirs(upload_folder, exist_ok=True)
+        filename=secure_filename(photo.filename)
+        photo.save=os.path.join(upload_folder, filename)
+        photo.save(photo_path)
+
         connection = get_db()
+
         connection.execute(
             """
             INSERT INTO candidates
             (name, email, password)
             VALUES (?, ?, ?)
             """,
-            (name, email, password)
+            (name, email, hashed_password, photo_path)
         )
         
         connection.commit()
