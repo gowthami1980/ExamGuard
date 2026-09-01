@@ -23,10 +23,10 @@ def init_db():
         )
     """)
 
-    connection.execute("""
-        ALTER TABLE candidates
-        ADD COLUMN photo TEXT
-    """)
+    #connection.execute("""
+    #    ALTER TABLE candidates
+    #    ADD COLUMN photo TEXT
+    #""")
 
     connection.commit()
     connection.close()

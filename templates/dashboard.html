@@ -3,14 +3,22 @@
 
 <head>
     <title>ExamGuard Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <h1>Candidate Dashboard</h1>
+    <div class="dashboard-container">
 
-    <p>Welcome to ExamGuard!</p>
+        <h1>Candidate Dashboard</h1>
 
-    <a href="/logout">Logout</a>
+        <p>Welcome to ExamGuard!</p>
+
+        <a href="/logout" class="logout-btn">Logout</a>
+
+    </div>
 
 </body>
+
+</html>

@@ -74,3 +74,40 @@ button {
 button:hover {
     background-color: #24566b;
 }
+
+.dashboard-container {
+    width: 500px;
+    max-width: 90%;
+    margin: 100px auto;
+    padding: 40px;
+    background: white;
+    border: 1px solid #c7d5dc;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.dashboard-container h1 {
+    color: #28627a;
+    margin-bottom: 25px;
+}
+
+.dashboard-container p {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.logout-btn {
+    display: inline-block;
+    padding: 10px 30px;
+    background: #287f9f;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background: #1f637c;
+}
