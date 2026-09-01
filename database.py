@@ -19,9 +19,13 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            photo TEXT
+            password TEXT NOT NULL
         )
+    """)
+
+    connection.execute("""
+        ALTER TABLE candidates
+        ADD COLUMN photo TEXT
     """)
 
     connection.commit()
