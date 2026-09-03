@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>ExamGuard Dashboard</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
-    <div class="dashboard-container">
+<div class="dashboard-container">
 
-        <h1>Candidate Dashboard</h1>
-
-        <p>Welcome to ExamGuard!</p>
-
-        <a href="/logout" class="logout-btn">Logout</a>
-
+    <div class="dashboard-icon">
+        <i class="fa-solid fa-shield-halved"></i>
     </div>
 
-</body>
+    <h1>Welcome to ExamGuard</h1>
 
+    <p class="welcome-text">
+        <i class="fa-solid fa-circle-check"></i>
+        You have successfully logged in.
+    </p>
+
+    <div class="dashboard-card">
+        <i class="fa-solid fa-user-check"></i>
+
+        <div>
+            <h3>Candidate Portal</h3>
+            <p>Your account is ready for the examination.</p>
+        </div>
+    </div>
+
+    <a href="/logout" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+    </a>
+
+</div>
+
+</body>
 </html>

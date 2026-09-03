@@ -1,43 +1,66 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>ExamGuard Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Candidate Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
+<div class="login-container">
+
+    <div class="login-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+    </div>
+
     <h1>Candidate Login</h1>
+    <p class="login-subtitle">Login to access your ExamGuard dashboard</p>
 
     <form method="POST">
 
-        <label>Email:</label>
+        <label>
+            Email
+        </label>
 
-        <input
-            type="email"
-            name="email"
-            required
-        >
+        <div class="input-box">
+            <i class="fa-solid fa-envelope"></i>
 
-        <br><br>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+        </div>
 
-        <label>Password:</label>
+        <label>
+            Password
+        </label>
 
-        <input
-            type="password"
-            name="password"
-            required
-        >
+        <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
 
-        <br><br>
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+        </div>
 
-        <button type="submit">
+        <button type="submit" class="login-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
             Login
         </button>
 
     </form>
 
-</body>
+</div>
 
+</body>
 </html>

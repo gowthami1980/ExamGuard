@@ -1,41 +1,474 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
+
     <title>ExamGuard Registration</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
+
 
 <body>
 
-    <h1>Candidate Registration</h1>
 
-    <form method="POST" enctype="multipart/form-data">
+<div class="form-container">
 
-        <label>Name</label>
-        <input type="text" name="name" required>
+
+    <h2>Candidate Registration</h2>
+
+
+    <form method="POST" id="registerForm">
+
+
+        <!-- NAME -->
+
+        <label>
+            <i class="fa-solid fa-user"></i>
+            Full Name
+        </label>
+
+        <div class="input-box">
+
+            <i class="fa-solid fa-user"></i>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+        </div>
+
+
+        <br>
+
+
+        <!-- EMAIL -->
+
+        <label>
+            <i class="fa-solid fa-envelope"></i>
+            Email
+        </label>
+
+        <div class="input-box">
+
+            <i class="fa-solid fa-envelope"></i>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+        </div>
+
+
+        <br>
+
+
+        <!-- PASSWORD -->
+
+        <label>
+            <i class="fa-solid fa-lock"></i>
+            Password
+        </label>
+
+        <div class="input-box">
+
+            <i class="fa-solid fa-lock"></i>
+
+            <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <i
+                class="fa-solid fa-eye password-eye"
+                id="togglePassword">
+            </i>
+
+        </div>
+
 
         <br><br>
 
-        <label>Email</label>
-        <input type="email" name="email" required>
 
-        <br><br>
+        <!-- CAMERA -->
 
-        <label>Password</label>
-        <input type="password" name="password" required>
+        <h3>
+            <i class="fa-solid fa-camera"></i>
+            Candidate Photo
+        </h3>
 
-        <br><br>
 
-        <label>Photo</label>
-        <input type="file" name="photo" accept="image/*" required>
+        <video
+            id="camera"
+            autoplay
+            playsinline
+        ></video>
 
-        <br><br>
 
-        <button type="submit">Register</button>
+        <br>
+
+
+        <!-- START CAMERA -->
+
+        <button
+            type="button"
+            id="startCamera"
+        >
+
+            <i class="fa-solid fa-video"></i>
+            Start Camera
+
+        </button>
+
+
+        <!-- CAPTURE PHOTO -->
+
+        <button
+            type="button"
+            id="capturePhoto"
+            disabled
+        >
+
+            <i class="fa-solid fa-camera"></i>
+            Capture Photo
+
+        </button>
+
+
+        <!-- CANVAS -->
+
+        <canvas id="canvas"></canvas>
+
+
+        <!-- PHOTO PREVIEW -->
+
+        <img
+            id="preview"
+            alt="Captured Photo"
+        >
+
+
+        <p id="photoStatus"></p>
+
+
+        <br>
+
+
+        <!-- REGISTER -->
+
+        <button
+            type="submit"
+            id="registerButton"
+            disabled
+        >
+
+            <i class="fa-solid fa-shield-halved"></i>
+            Register
+
+        </button>
+
 
     </form>
+
+
+</div>
+
+
+<script>
+
+
+    // ----------------------------------------
+    // Get HTML elements
+    // ----------------------------------------
+
+    const video =
+        document.getElementById("camera");
+
+    const canvas =
+        document.getElementById("canvas");
+
+    const preview =
+        document.getElementById("preview");
+
+    const startCameraButton =
+        document.getElementById("startCamera");
+
+    const captureButton =
+        document.getElementById("capturePhoto");
+
+    const registerButton =
+        document.getElementById("registerButton");
+
+    const photoStatus =
+        document.getElementById("photoStatus");
+
+    const password =
+        document.getElementById("password");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+
+    // Store camera stream
+
+    let cameraStream = null;
+
+
+    // ----------------------------------------
+    // SHOW / HIDE PASSWORD
+    // ----------------------------------------
+
+    togglePassword.addEventListener(
+        "click",
+        function () {
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+                togglePassword.classList.remove(
+                    "fa-eye"
+                );
+
+                togglePassword.classList.add(
+                    "fa-eye-slash"
+                );
+
+            }
+
+            else {
+
+                password.type = "password";
+
+                togglePassword.classList.remove(
+                    "fa-eye-slash"
+                );
+
+                togglePassword.classList.add(
+                    "fa-eye"
+                );
+
+            }
+
+        }
+    );
+
+
+    // ----------------------------------------
+    // START CAMERA
+    // ----------------------------------------
+
+    startCameraButton.addEventListener(
+        "click",
+        async function () {
+
+            try {
+
+                // Ask browser for camera permission
+
+                cameraStream =
+                    await navigator.mediaDevices.getUserMedia({
+
+                        video: true
+
+                    });
+
+
+                // Show camera inside video element
+
+                video.srcObject =
+                    cameraStream;
+
+
+                // Enable capture button
+
+                captureButton.disabled =
+                    false;
+
+
+                photoStatus.textContent =
+                    "Camera started. Position your face and click Capture Photo.";
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+
+                photoStatus.textContent =
+                    "Unable to access camera. Please allow camera permission.";
+
+            }
+
+        }
+    );
+
+
+    // ----------------------------------------
+    // CAPTURE PHOTO
+    // ----------------------------------------
+
+    captureButton.addEventListener(
+        "click",
+        function () {
+
+
+            // Set canvas size same as camera
+
+            canvas.width =
+                video.videoWidth;
+
+            canvas.height =
+                video.videoHeight;
+
+
+            // Get canvas drawing context
+
+            const context =
+                canvas.getContext("2d");
+
+
+            // Copy video frame to canvas
+
+            context.drawImage(
+                video,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            // Display captured image
+
+            const imageData =
+                canvas.toDataURL("image/jpeg");
+
+
+            preview.src =
+                imageData;
+
+
+            preview.style.display =
+                "block";
+
+
+            photoStatus.textContent =
+                "Photo captured. Saving...";
+
+
+            // Convert canvas image
+            // into Blob
+
+            canvas.toBlob(
+                async function (blob) {
+
+
+                    // Create form data
+
+                    const formData =
+                        new FormData();
+
+
+                    // Add photo
+
+                    formData.append(
+                        "photo",
+                        blob,
+                        "candidate.jpg"
+                    );
+
+
+                    // Send photo to Flask
+
+                    const response =
+                        await fetch(
+                            "/capture-photo",
+                            {
+                                method: "POST",
+                                body: formData
+                            }
+                        );
+
+
+                    // Convert response to JSON
+
+                    const result =
+                        await response.json();
+
+
+                    // Check result
+
+                    if (result.success) {
+
+
+                        photoStatus.textContent =
+                            "Photo captured successfully!";
+
+
+                        // Enable Register button
+
+                        registerButton.disabled =
+                            false;
+
+
+                        // Stop camera
+
+                        if (cameraStream) {
+
+                            cameraStream
+                                .getTracks()
+                                .forEach(
+                                    function(track) {
+
+                                        track.stop();
+
+                                    }
+                                );
+
+                        }
+
+                    }
+
+                    else {
+
+
+                        photoStatus.textContent =
+                            "Photo capture failed.";
+
+                    }
+
+
+                },
+
+                "image/jpeg"
+
+            );
+
+        }
+    );
+
+
+</script>
+
 
 </body>
 

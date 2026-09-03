@@ -7,107 +7,463 @@
 
 body {
     min-height: 100vh;
-    background: #e8f1f5;
-    color: #26332d;
+    background:
+        radial-gradient(circle at 10% 10%, #ffdce8 0%, transparent 30%),
+        radial-gradient(circle at 90% 15%, #e7ddff 0%, transparent 30%),
+        radial-gradient(circle at 80% 90%, #ffe9d6 0%, transparent 30%),
+        #fff8fb;
+    color: #403647;
     text-align: center;
 }
 
+
+/* Main Heading */
+
 h1 {
-    margin-top: 60px;
-    color: #24566b;
+    margin-top: 55px;
+    margin-bottom: 10px;
+    color: #54364d;
+    font-size: 32px;
+    letter-spacing: 0.5px;
 }
+
+
+/* Registration Card */
 
 form {
-    width: 360px;
-    margin: 30px auto;
-    padding: 30px;
-
-    background-color: white;
-
-    border: 1px solid #b8cbd4;
-    border-radius: 10px;
-
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
+    width: 420px;
+    max-width: 92%;
+    margin: 30px auto 60px;
+    padding: 34px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid #f0cbdc;
+    border-radius: 22px;
+    box-shadow: 0 18px 45px rgba(135, 79, 108, 0.15);
     text-align: left;
 }
+
+
+/* Labels */
 
 label {
     display: block;
     margin-bottom: 7px;
-
-    color: #24566b;
+    color: #65475d;
+    font-size: 14px;
     font-weight: bold;
 }
 
-input {
+
+/* Input Box */
+
+.input-box {
+    position: relative;
     width: 100%;
-    padding: 10px;
+}
 
-    border: 1px solid #9db6c2;
-    border-radius: 6px;
 
+/* Icon inside Input */
+
+.input-box > i:first-child {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ee72a2;
     font-size: 14px;
 }
 
-input:focus {
-    outline: none;
-    border-color: #287a9c;
+
+/* Input */
+
+.input-box input {
+    width: 100%;
+    padding: 12px 42px 12px 40px;
+    background: #fffafd;
+    border: 1px solid #dfc7d5;
+    border-radius: 9px;
+    color: #403647;
+    font-size: 14px;
+    transition: 0.25s;
 }
 
-button {
+.input-box input:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: #d48aae;
+    box-shadow: 0 0 0 3px rgba(212, 138, 174, 0.12);
+}
+
+
+/* Password Eye */
+
+.password-eye {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a477d1;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.password-eye:hover {
+    color: #d6659a;
+}
+
+
+/* Candidate Photo */
+
+h3 {
+    margin-top: 5px;
+    margin-bottom: 14px;
+    color: #65475d;
+    font-size: 18px;
+}
+
+h3 i {
+    color: #ee72a2;
+    margin-right: 6px;
+}
+
+
+/* Camera */
+
+#camera {
     width: 100%;
-    padding: 11px;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    margin: 15px auto;
+    background: #241c27;
+    border: 3px solid #e6a6c3;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(160, 87, 123, 0.15);
+}
 
+
+/* Canvas */
+
+#canvas {
+    display: none;
+}
+
+
+/* Captured Photo */
+
+#preview {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: none;
+    margin: 15px auto;
+    border-radius: 16px;
+    border: 3px solid #b9a3df;
+    box-shadow: 0 8px 22px rgba(117, 92, 155, 0.15);
+}
+
+
+/* Camera Buttons */
+
+#startCamera,
+#capturePhoto {
+    width: 48%;
+    display: inline-block;
+    margin: 5px 1%;
+    padding: 12px 6px;
     border: none;
-    border-radius: 6px;
-
-    background-color: #287a9c;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d978a5, #b98bd8);
     color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+}
 
+
+/* Button Icons */
+
+#startCamera i,
+#capturePhoto i,
+#registerButton i {
+    margin-right: 6px;
+}
+
+
+/* Button Hover */
+
+#startCamera:hover,
+#capturePhoto:hover {
+    background: linear-gradient(135deg, #c96594, #a878ca);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(187, 112, 155, 0.22);
+}
+
+
+/* Disabled Capture */
+
+#capturePhoto:disabled {
+    background: #d9cfd6;
+    color: #91848d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* Photo Status */
+
+#photoStatus {
+    text-align: center;
+    min-height: 18px;
+    margin-top: 10px;
+    color: #9a6682;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+/* Register */
+
+#registerButton {
+    width: 100%;
+    margin-top: 5px;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(100deg, #d978a5, #b38bd7, #e8a47c);
+    color: white;
     font-size: 15px;
     font-weight: bold;
-
     cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 7px 20px rgba(194, 113, 153, 0.18);
 }
 
-button:hover {
-    background-color: #24566b;
+#registerButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(194, 113, 153, 0.25);
 }
+
+
+/* Disabled Register */
+
+#registerButton:disabled {
+    background: #d9d4d8;
+    color: #888087;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+/* ================================= */
+/* LOGIN PAGE */
+/* ================================= */
+
+.login-container {
+    width: 430px;
+    max-width: 92%;
+    margin: 75px auto;
+    padding: 35px 38px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #f0cbdc;
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(135, 79, 108, 0.15);
+    text-align: left;
+}
+
+
+/* Login Icon */
+
+.login-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff0f6;
+    border: 2px solid #e6a6c3;
+    border-radius: 50%;
+    color: #d978a5;
+    font-size: 25px;
+}
+
+
+/* Login Heading */
+
+.login-container h1 {
+    margin: 0;
+    text-align: center;
+    color: #54364d;
+    font-size: 30px;
+}
+
+
+/* Login Subtitle */
+
+.login-subtitle {
+    margin: 8px 0 28px;
+    text-align: center;
+    color: #8b7180;
+    font-size: 13px;
+}
+
+
+/* Login Form */
+
+.login-container form {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+/* Login Labels */
+
+.login-container label {
+    margin-top: 18px;
+    margin-bottom: 7px;
+}
+
+
+/* Login Button */
+
+.login-btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d978a5, #b98bd8);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(187, 112, 155, 0.25);
+}
+
+.login-btn i {
+    margin-right: 6px;
+}
+
+
+/* ================================= */
+/* DASHBOARD */
+/* ================================= */
 
 .dashboard-container {
-    width: 500px;
-    max-width: 90%;
-    margin: 100px auto;
-    padding: 40px;
-    background: white;
-    border: 1px solid #c7d5dc;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    width: 520px;
+    max-width: 92%;
+    margin: 90px auto;
+    padding: 42px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #f0cbdc;
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(135, 79, 108, 0.15);
     text-align: center;
 }
 
-.dashboard-container h1 {
-    color: #28627a;
-    margin-bottom: 25px;
+
+/* Dashboard Icon */
+
+.dashboard-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff0f6;
+    border: 2px solid #e6a6c3;
+    border-radius: 50%;
+    color: #d978a5;
+    font-size: 25px;
 }
 
-.dashboard-container p {
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 30px;
+
+/* Dashboard Heading */
+
+.dashboard-container h1 {
+    margin: 0 0 10px;
+    color: #54364d;
+    font-size: 30px;
 }
+
+
+/* Welcome Text */
+
+.welcome-text {
+    margin-bottom: 28px;
+    color: #806b78;
+    font-size: 14px;
+}
+
+.welcome-text i {
+    color: #d978a5;
+    margin-right: 5px;
+}
+
+
+/* Dashboard Card */
+
+.dashboard-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    margin-bottom: 28px;
+    background: #fff7fb;
+    border: 1px solid #efd1df;
+    border-radius: 14px;
+    text-align: left;
+}
+
+.dashboard-card > i {
+    color: #b98bd8;
+    font-size: 27px;
+}
+
+.dashboard-card h3 {
+    margin: 0 0 5px;
+    color: #65475d;
+    font-size: 16px;
+}
+
+.dashboard-card p {
+    margin: 0;
+    color: #8b7180;
+    font-size: 13px;
+}
+
+
+/* Logout */
 
 .logout-btn {
     display: inline-block;
-    padding: 10px 30px;
-    background: #287f9f;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #d978a5, #b98bd8);
     color: white;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 10px;
     font-weight: bold;
+    transition: 0.25s;
 }
 
 .logout-btn:hover {
-    background: #1f637c;
+    background: linear-gradient(135deg, #c96594, #a878ca);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(187, 112, 155, 0.22);
 }
