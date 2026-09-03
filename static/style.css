@@ -1,386 +1,43 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+/* Icons */
+
+label i {
+    color: #ee72a2;
+    margin-right: 6px;
 }
 
-body {
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at top left, #35145f 0%, transparent 35%),
-        radial-gradient(circle at bottom right, #182c55 0%, transparent 35%),
-        #080b16;
-
-    color: #f4f1ff;
-    text-align: center;
+.input-box {
+    position: relative;
+    width: 100%;
 }
 
-
-/* Main Heading */
-
-h1 {
-    margin-top: 55px;
-    margin-bottom: 10px;
-
-    color: #ffffff;
-    font-size: 32px;
-    letter-spacing: 1px;
-
-    text-shadow: 0 0 18px rgba(151, 92, 255, 0.5);
-}
-
-
-/* Registration Form */
-
-form {
-    width: 420px;
-    max-width: 92%;
-
-    margin: 30px auto 60px;
-    padding: 32px;
-
-    background: rgba(18, 20, 38, 0.92);
-
-    border: 1px solid rgba(157, 91, 255, 0.45);
-    border-radius: 18px;
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(116, 65, 220, 0.12);
-
-    text-align: left;
-
-    backdrop-filter: blur(12px);
-}
-
-
-/* Labels */
-
-label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #d8c9ff;
-
+.input-box > i:first-child {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ee72a2;
     font-size: 14px;
-    font-weight: bold;
 }
 
-
-/* Input Fields */
-
-input {
-    width: 100%;
-
-    padding: 12px 13px;
-
-    margin-bottom: 2px;
-
-    background: #0e1221;
-
-    border: 1px solid #353957;
-
-    border-radius: 8px;
-
-    color: #ffffff;
-
-    font-size: 14px;
-
-    transition: 0.25s;
+.input-box input {
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
-
-input::placeholder {
-    color: #73788f;
-}
-
-
-input:focus {
-    outline: none;
-
-    border-color: #9b5cff;
-
-    box-shadow:
-        0 0 0 3px rgba(155, 92, 255, 0.12),
-        0 0 15px rgba(155, 92, 255, 0.18);
-}
-
-
-/* Candidate Photo Heading */
-
-h3 {
-    margin-top: 5px;
-    margin-bottom: 12px;
-
-    color: #ffffff;
-
-    font-size: 18px;
-
-    letter-spacing: 0.3px;
-}
-
-
-/* Camera */
-
-#camera {
-    width: 100%;
-    height: 230px;
-
-    object-fit: cover;
-
-    display: block;
-
-    margin: 12px auto 15px;
-
-    background: #05060b;
-
-    border: 1px solid #7546d8;
-
-    border-radius: 14px;
-
-    box-shadow:
-        inset 0 0 25px rgba(0, 0, 0, 0.7),
-        0 0 18px rgba(126, 72, 230, 0.18);
-}
-
-
-/* Canvas */
-
-#canvas {
-    display: none;
-}
-
-
-/* Captured Photo */
-
-#preview {
-    width: 100%;
-    height: 230px;
-
-    object-fit: cover;
-
-    display: none;
-
-    margin: 15px auto;
-
-    border-radius: 14px;
-
-    border: 1px solid #a56aff;
-
-    box-shadow:
-        0 0 20px rgba(165, 106, 255, 0.2);
-}
-
-
-/* Camera Buttons */
-
-#startCamera,
-#capturePhoto {
-    width: 48%;
-
-    display: inline-block;
-
-    margin: 4px 1%;
-
-    padding: 11px 8px;
-
-    border-radius: 8px;
-
-    background: linear-gradient(
-        135deg,
-        #6d3bd1,
-        #9b5cff
-    );
-
-    color: #ffffff;
-
-    font-size: 13px;
-    font-weight: bold;
-
-    border: 1px solid rgba(255, 255, 255, 0.08);
-
+.password-eye {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a477d1;
     cursor: pointer;
-
-    transition: 0.25s;
 }
 
-
-#startCamera:hover,
-#capturePhoto:hover {
-    transform: translateY(-1px);
-
-    background: linear-gradient(
-        135deg,
-        #824ce5,
-        #ad72ff
-    );
-
-    box-shadow:
-        0 0 18px rgba(155, 92, 255, 0.35);
+h3 i {
+    color: #ee72a2;
+    margin-right: 6px;
 }
 
-
-#capturePhoto:disabled {
-    opacity: 0.4;
-
-    cursor: not-allowed;
-
-    transform: none;
-
-    box-shadow: none;
-}
-
-
-/* Photo Status */
-
-#photoStatus {
-    text-align: center;
-
-    min-height: 18px;
-
-    margin-top: 10px;
-
-    color: #bfa7ff;
-
-    font-size: 13px;
-
-    font-weight: bold;
-}
-
-
-/* Register Button */
-
-#registerButton {
-    width: 100%;
-
-    margin-top: 5px;
-
-    padding: 13px;
-
-    border-radius: 9px;
-
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
-    background: linear-gradient(
-        135deg,
-        #5030bd,
-        #8b4de8
-    );
-
-    color: #ffffff;
-
-    font-size: 15px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.25s;
-}
-
-
-#registerButton:hover {
-    background: linear-gradient(
-        135deg,
-        #6840d5,
-        #a461ff
-    );
-
-    box-shadow:
-        0 0 22px rgba(139, 77, 232, 0.35);
-
-    transform: translateY(-1px);
-}
-
-
-#registerButton:disabled {
-    background: #292d3d;
-
-    color: #777c91;
-
-    border-color: #34384b;
-
-    cursor: not-allowed;
-
-    box-shadow: none;
-
-    transform: none;
-}
-
-
-/* Dashboard */
-
-.dashboard-container {
-    width: 500px;
-    max-width: 90%;
-
-    margin: 100px auto;
-
-    padding: 40px;
-
-    background: rgba(18, 20, 38, 0.92);
-
-    border: 1px solid rgba(157, 91, 255, 0.4);
-
-    border-radius: 16px;
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.5);
-
-    text-align: center;
-}
-
-
-.dashboard-container h1 {
-    color: #ffffff;
-
-    margin-bottom: 25px;
-}
-
-
-.dashboard-container p {
-    color: #bfc3d5;
-
-    font-size: 18px;
-
-    margin-bottom: 30px;
-}
-
-
-/* Logout */
-
-.logout-btn {
-    display: inline-block;
-
-    padding: 11px 30px;
-
-    background: linear-gradient(
-        135deg,
-        #6d3bd1,
-        #9b5cff
-    );
-
-    color: white;
-
-    text-decoration: none;
-
-    border-radius: 8px;
-
-    font-weight: bold;
-
-    transition: 0.25s;
-}
-
-
-.logout-btn:hover {
-    background: linear-gradient(
-        135deg,
-        #824ce5,
-        #ad72ff
-    );
-
-    box-shadow:
-        0 0 18px rgba(155, 92, 255, 0.3);
+button i {
+    margin-right: 6px;
 }
