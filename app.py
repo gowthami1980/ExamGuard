@@ -1,6 +1,6 @@
-from flask import Flask, redirect, request, render_template, session 
+from flask import Flask, redirect, request, render_template, session, redirect 
 from database import init_db, get_db
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash,check_password_hash
 from werkzeug.utils import secure_filename
 import os
 from camera import capture_photo
@@ -16,7 +16,7 @@ def captureCandidatePhoto():
     photo= request.files.get("photo")
     if not photo:
         return {
-            "success":"False",
+            "success":False,
             "message":"No photo uploaded"
 
         },400
@@ -24,12 +24,12 @@ def captureCandidatePhoto():
     photo_path = capture_photo(image_data)
     if not photo_path:
         return {
-            "success":"False",
+            "success":False,
             "message":"could not process photo"
         },400
     session["capture_photo"]=photo_path
     return {
-        "success":"True",
+        "success":True,
         "message":"photo captured successfully",
         "photo_path":photo_path
 
@@ -46,34 +46,34 @@ def home():
     return "Welcome to Exam Guard"
 
 
+ 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username', '').strip()
+        username = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
        # photo = request.files.get('candidate_photo')
 
-        photo_path=session.get("capture_photo")
-
-
-        if not photo_path:
-            return "please capture your photo before registering" 
-
         if not username or not email or not password:
             return render_template('register.html', error="Please fill in all required fields.")
+        photo_path = session.get("capture_photo")
+        if not photo_path:
+            return render_template('register.html', error="Please capture a photo before registering.")
+    try:    
+        connection = get_db()
+        print("candidate email:", email)
 
         
-        connection = get_db()
-        cursor = connection.cursor()
+    
         
         # Check if email is already registered
-        cursor.execute("SELECT id FROM candidates WHERE email = ?", (email,))
-        if cursor.fetchone():
-            connection.close()
-            return render_template('register.html', error="An account with this email already exists.")
+        # connection.execute("SELECT id FROM candidates WHERE email = ?", (email,))
+        # if connection.fetchone():
+        #     connection.close()
+        #     return render_template('register.html', error="An account with this email already exists.")
 
-        cursor.execute(
+        connection.execute(
             """
             INSERT INTO candidates(name, email, password, photo)
             VALUES(?, ?, ?, ?)
@@ -81,10 +81,22 @@ def register():
             (username, email, generate_password_hash(password), photo_path)
         )
         connection.commit()
-        connection.close()
+        # connection.close()
+        session.pop("capture_photo", None)
         print("Registration successful for:", username)
 
-        return render_template('register.html', success=True, username=username)
+        # return render_template('register.html', success=True, username=username)
+        print("Registration successful for:", username)
+        print("Redirecting to login page...")
+        return redirect("/login")
+        print("Registration successful for:")
+    except Exception as e:
+        connection.rollback()
+    
+        print("Error during registration:", e)
+        return render_template('register.html', error="An error occurred during registration. Please try again.")
+    finally:
+        connection.close()
 
     return render_template('register.html')
 
