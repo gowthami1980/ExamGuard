@@ -1,3 +1,0 @@
-#openCV open source computer vision library
-#working on camera, images, videos, face detection, object detection, image processingand more. It is widely used in various applications such as robotics, surveillance, augmented reality, and autonomous vehicles.
-#openCV does not take a photo itself, just it connects to your default webcam and receives continuously video frames and we shouls choose one frame to save as an image.
