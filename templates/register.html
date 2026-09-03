@@ -9,25 +9,59 @@
 
 <body>
 
-    <h1>Candidate Registration</h1>
 
-    <form method="POST" enctype="multipart/form-data">
+<div class="form-container">
+
+
+    <h2>Candidate Registration</h2>
+
+
+    <form method="POST" id="registerForm">
+
+
+        <!-- NAME -->
 
         <label>Name</label>
-        <input type="text" name="name" required>
 
-        <br><br>
+        <input
+            type="text"
+            name="name"
+            required
+        >
+
+
+        <br>
+
+
+        <!-- EMAIL -->
 
         <label>Email</label>
-        <input type="email" name="email" required>
 
-        <br><br>
+        <input
+            type="email"
+            name="email"
+            required
+        >
+
+
+        <br>
+
+
+        <!-- PASSWORD -->
 
         <label>Password</label>
-        <input type="password" name="password" required>
+
+        <input
+            type="password"
+            name="password"
+            required
+        >
+
 
         <br><br>
-     <!-- CAMERA -->
+
+
+        <!-- CAMERA -->
 
         <h3>Candidate Photo</h3>
 
@@ -93,69 +127,237 @@
             id="registerButton"
             disabled
         >
+
             Register
+
         </button>
+
 
     </form>
 
-<script>
-    const startCameraButton = document.getElementById('startCamera');
-    const capturePhotoButton = document.getElementById('capturePhoto');
-    const registerButton = document.getElementById('registerButton');
-    const camera = document.getElementById('camera');
-    const canvas = document.getElementById('canvas');
-    const photoStatus = document.getElementById('photoStatus');
-    const preview = document.getElementById('preview');
 
+</div>
+
+
+<script>
+
+
+    // ----------------------------------------
+    // Get HTML elements
+    // ----------------------------------------
+
+    const video = document.getElementById("camera");
+    const canvas =document.getElementById("canvas");
+    const preview =document.getElementById("preview");
+    const startCameraButton =document.getElementById("startCamera");
+    const captureButton =document.getElementById("capturePhoto");
+    const registerButton = document.getElementById("registerButton");
+    const photoStatus =document.getElementById("photoStatus");
+    // Store camera stream
     let cameraStream = null;
-    startCameraButton.addEventListener('click', async function(){
-        try{
-            cameraStream=await navigator.mediaDevices.getUserMedia({video:true});
-            camera.srcObject=cameraStream // show camera in video element
-            capturePhotoButton.disabled=false;
-            photoStatus.textContent="Camera started. You can capture your photo now.";
-        }
-        catch(error){
-            console.error("Error accessing camera:",error);
-            photoStatus.textContent="Error accessing camera. Please check your permissions.";
-        }
-    })
-    capturePhotoButton.addEventListener('click',function(){
-        
-        canvas.width=camera.videoWidth;
-        canvas.height=camera.videoHeight;
-        const context=canvas.getContext('2d'); 
-        // copy video frame to canvas
-        context.drawImage(camera,0,0,canvas.width,canvas.height);
-        const imageData=canvas.toDataURL('image/jpeg'); // get image data as base64
-        preview.src=imageData; // show captured photo in img element
-        preview.style.display='block';
-        camera.style.display = 'none'; 
-        photoStatus.textContent="Photo captured. You can now register.";
-        canvas.toBlob(async function(blob){
-            const formData=new FormData();
-            formData.append('photo',blob,'photo.jpg');
-            try{
-                const response=await fetch('/capture-photo',{
-                    method:'POST',
-                    body:formData
-                });
-                const result=await response.json();
-                if(result.success==='True'){
-                    photoStatus.textContent="Photo uploaded successfully.";
-                    registerButton.disabled=false;
-                }else{
-                    photoStatus.textContent="Photo upload failed: "+result.message;
-                }
-            }catch(error){
-                console.error("Error uploading photo:",error);
-                photoStatus.textContent="Error uploading photo. Please try again.";
+
+    // ----------------------------------------
+    // START CAMERA
+    // ----------------------------------------
+
+    startCameraButton.addEventListener(
+        "click",
+        async function () {
+
+            try {
+
+                // Ask browser for camera permission
+
+                cameraStream =
+                    await navigator.mediaDevices.getUserMedia({
+
+                        video: true
+
+                    });
+
+
+                // Show camera inside video element
+
+                video.srcObject =
+                    cameraStream;
+
+
+                // Enable capture button
+
+                captureButton.disabled =
+                    false
+                photoStatus.textContent =
+                    "Camera started. Position your face and click Capture Photo.";
+
             }
-        },'image/jpeg'
-        )
-    })
-    </script>
-    </body>
+
+            catch (error) {
+
+                console.error(error);
+
+
+                photoStatus.textContent =
+                    "Unable to access camera. Please allow camera permission.";
+
+            }
+
+        }
+    );
+
+
+
+    // ----------------------------------------
+    // CAPTURE PHOTO
+    // ----------------------------------------
+
+    captureButton.addEventListener(
+        "click",
+        function () {
+
+
+            // Set canvas size same as camera
+
+            canvas.width =
+                video.videoWidth;
+
+
+            canvas.height =
+                video.videoHeight;
+
+
+            // Get canvas drawing context
+
+            const context =
+                canvas.getContext("2d");
+
+
+            // Copy video frame to canvas
+
+            context.drawImage(
+                video,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            // Display captured image
+
+            const imageData =
+                canvas.toDataURL("image/jpeg");
+
+
+            preview.src =
+                imageData;
+
+
+            preview.style.display =
+                "block";
+
+
+            photoStatus.textContent =
+                "Photo captured. Saving...";
+
+
+
+            // Convert canvas image
+            // into Blob
+
+            canvas.toBlob(
+                async function (blob) {
+
+
+                    // Create form data
+
+                    const formData =
+                        new FormData();
+
+
+                    // Add photo
+
+                    formData.append(
+                        "photo",
+                        blob,
+                        "candidate.jpg"
+                    );
+
+
+
+                    // Send photo to Flask
+
+                    const response =
+                        await fetch(
+                            "/capture-photo",
+                            {
+                                method: "POST",
+                                body: formData
+                            }
+                        );
+
+
+
+                    // Convert response to JSON
+
+                    const result =
+                        await response.json();
+
+
+
+                    // Check result
+
+                    if (result.success) {
+
+
+                        photoStatus.textContent =
+                            "Photo captured successfully!";
+
+
+                        // Enable Register button
+
+                        registerButton.disabled =
+                            false;
+
+
+
+                        // Stop camera
+
+                        if (cameraStream) {
+
+                            cameraStream
+                                .getTracks()
+                                .forEach(
+                                    function(track) {
+
+                                        track.stop();
+
+                                    }
+                                );
+
+                        }
+
+                    }
+
+                    else {
+
+
+                        photoStatus.textContent =
+                            "Photo capture failed.";
+
+                    }
+
+
+                },
+                "image/jpeg"
+            );
+
+        }
+    );
+
+
+</script>
+
+
+</body>
 
 </html>
-       
