@@ -111,3 +111,51 @@ button:hover {
 .logout-btn:hover {
     background: #1f637c;
 }
+/* Candidate Photo Section */
+
+#camera {
+    width: 280px;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+    margin: 15px auto;
+    border-radius: 12px;
+    border: 2px solid #287a9c;
+    background: #111;
+}
+
+/* Canvas is only used internally */
+#canvas {
+    display: none;
+}
+
+/* Captured Photo */
+
+#preview {
+    width: 280px;
+    height: 210px;
+    object-fit: cover;
+    display: none;
+    margin: 15px auto;
+    border-radius: 12px;
+    border: 2px solid #536b5d;
+}
+
+/* Camera buttons */
+
+#startCamera,
+#capturePhoto {
+    width: 48%;
+    display: inline-block;
+    margin: 5px 1%;
+}
+
+/* Photo status */
+
+#photoStatus {
+    text-align: center;
+    color: #24566b;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 10px;
+}
