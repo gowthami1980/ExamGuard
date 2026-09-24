@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examination — ExamGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        #camera {
+            width: 100%;
+            max-width: 360px;
+            border-radius: 4px;
+            background: #000;
+            display: block;
+            margin-top: 10px;
+        }
+
+        #canvas { display: none; }
+
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 720px) {
+            .monitor-grid { grid-template-columns: 1fr; }
+        }
+
+        .option {
+            display: block;
+            padding: 10px 0;
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span class="logo-dot"></span> ExamGuard
+        </div>
+
+        <div class="navbar-links">
+            <span id="session-badge" class="badge badge-progress">
+                in progress
+            </span>
+        </div>
+    </header>
+
+    <main class="page">
+
+        <div class="card" style="margin-bottom:24px;">
+            <h1>Examination in progress</h1>
+
+            <p class="subtitle">
+                {% if candidate_name %}
+                    Candidate: {{ candidate_name }} —
+                {% endif %}
+                keep this tab focused and your face within the camera frame.
+            </p>
+
+            <div class="btn-row">
+                <button id="pauseBtn" class="btn btn-secondary">
+                    Pause exam
+                </button>
+
+                <button id="resumeBtn"
+                        class="btn btn-secondary"
+                        style="display:none;">
+                    Resume exam
+                </button>
+
+                <button id="submitBtn" class="btn btn-danger">
+                    Submit exam
+                </button>
+            </div>
+        </div>
+
+        <div class="monitor-grid">
+
+            <div class="card">
+
+                <h3>Monitoring status</h3>
+
+                <div class="status-line">
+                    <span id="camera-dot"
+                          class="status-dot dot-neutral"></span>
+
+                    <span class="status-label">
+                        Camera
+                    </span>
+
+                    <span id="camera-status"
+                          class="status-value">
+                        Starting…
+                    </span>
+                </div>
+
+                <div class="status-line">
+                    <span id="face-dot"
+                          class="status-dot dot-neutral"></span>
+
+                    <span class="status-label">
+                        Face presence
+                    </span>
+
+                    <span id="face-status"
+                          class="status-value">
+                        Waiting…
+                    </span>
+                </div>
+
+                <div class="status-line">
+                    <span id="browser-dot"
+                          class="status-dot dot-good"></span>
+
+                    <span class="status-label">
+                        Browser activity
+                    </span>
+
+                    <span id="browser-status"
+                          class="status-value">
+                        Active
+                    </span>
+                </div>
+
+                <video id="camera"
+                       autoplay
+                       playsinline></video>
+
+                <canvas id="canvas"></canvas>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Question 1</h3>
+
+                <p>
+                    What is the output of the following Python code?
+                </p>
+
+                <pre style="background:var(--paper);
+                            padding:12px;
+                            border-radius:3px;">x = 10
+print(x + 5)</pre>
+
+                <label class="option">
+                    <input type="radio"
+                           name="answer"
+                           value="10">
+                    10
+                </label>
+
+                <label class="option">
+                    <input type="radio"
+                           name="answer"
+                           value="15">
+                    15
+                </label>
+
+                <label class="option">
+                    <input type="radio"
+                           name="answer"
+                           value="20">
+                    20
+                </label>
+
+                <label class="option">
+                    <input type="radio"
+                           name="answer"
+                           value="25">
+                    25
+                </label>
+
+                <button class="btn btn-primary"
+                        style="margin-top:14px;"
+                        onclick="submitAnswer()">
+                    Save answer
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card" style="margin-top:24px;">
+
+            <h3>Activity log</h3>
+
+            <div class="console" id="event-log">
+
+                <div class="console-line">
+                    <span class="t">--:--:--</span>
+                    Monitoring started…
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+<script>
+
+    /* ================= CAMERA / FACE MONITORING ================= */
+
+    const video = document.getElementById("camera");
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+
+    const cameraStatus =
+        document.getElementById("camera-status");
+
+    const cameraDot =
+        document.getElementById("camera-dot");
+
+    const faceStatus =
+        document.getElementById("face-status");
+
+    const faceDot =
+        document.getElementById("face-dot");
+
+
+    navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+    })
+
+    .then(function (stream) {
+
+        video.srcObject = stream;
+
+        cameraStatus.innerText = "Connected";
+
+        cameraDot.className =
+            "status-dot dot-good";
+
+        setInterval(captureAndSendFrame, 2000);
+
+    })
+
+    .catch(function (error) {
+
+        console.error("Camera error:", error);
+
+        cameraStatus.innerText =
+            "Access denied";
+
+        cameraDot.className =
+            "status-dot dot-bad";
+
+    });
+
+
+    function captureAndSendFrame() {
+
+        canvas.width = video.videoWidth;
+
+        canvas.height = video.videoHeight;
+
+        context.drawImage(
+            video,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        canvas.toBlob(function (blob) {
+
+            if (!blob) return;
+
+            const formData = new FormData();
+
+            formData.append(
+                "frame",
+                blob,
+                "frame.jpg"
+            );
+
+
+            fetch("/monitor-face", {
+                method: "POST",
+                body: formData
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.state === "face_detected") {
+
+                    faceStatus.innerText =
+                        "Detected";
+
+                    faceDot.className =
+                        "status-dot dot-good";
+
+                }
+
+                else if (data.state === "face_absent") {
+
+                    faceStatus.innerText =
+                        "Not visible";
+
+                    faceDot.className =
+                        "status-dot dot-bad";
+
+                }
+
+            })
+
+            .catch(error =>
+                console.error(
+                    "Face monitoring error:",
+                    error
+                )
+            );
+
+        }, "image/jpeg", 0.7);
+
+    }
+
+
+    /* ================= BROWSER EVENT LOGGING ================= */
+
+    function logBrowserEvent(eventType, details) {
+
+        fetch("/log-browser-event", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+                event_type: eventType,
+                details: details
+            })
+
+        })
+
+        .then(response => response.json())
+
+        .catch(error =>
+            console.error(
+                "Browser event error:",
+                error
+            )
+        );
+
+
+        displayEvent(eventType, details);
+
+    }
+
+
+    function displayEvent(eventType, details) {
+
+        const eventLog =
+            document.getElementById("event-log");
+
+        const time =
+            new Date().toLocaleTimeString();
+
+
+        const flagTypes = [
+            "tab_switch",
+            "focus_lost",
+            "right_click",
+            "copy_attempt",
+            "paste_attempt",
+            "cut_attempt"
+        ];
+
+
+        const line =
+            document.createElement("div");
+
+        line.className =
+            "console-line" +
+            (
+                flagTypes.includes(eventType)
+                    ? " flag"
+                    : ""
+            );
+
+
+        line.innerHTML =
+            `<span class="t">${time}</span>${eventType} — ${details}`;
+
+
+        eventLog.appendChild(line);
+
+        eventLog.scrollTop =
+            eventLog.scrollHeight;
+
+    }
+
+
+    window.addEventListener("load", function () {
+
+        logBrowserEvent(
+            "exam_started",
+            "Candidate opened examination page"
+        );
+
+    });
+
+
+    document.addEventListener(
+        "visibilitychange",
+        function () {
+
+            if (document.hidden) {
+
+                logBrowserEvent(
+                    "tab_switch",
+                    "Candidate left examination page"
+                );
+
+            }
+
+            else {
+
+                logBrowserEvent(
+                    "tab_return",
+                    "Candidate returned to examination page"
+                );
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener("blur", function () {
+
+        logBrowserEvent(
+            "focus_lost",
+            "Browser window lost focus"
+        );
+
+    });
+
+
+    window.addEventListener("focus", function () {
+
+        logBrowserEvent(
+            "focus_gained",
+            "Browser window regained focus"
+        );
+
+    });
+
+
+    document.addEventListener("copy", function () {
+
+        logBrowserEvent(
+            "copy_attempt",
+            "Candidate attempted to copy content"
+        );
+
+    });
+
+
+    document.addEventListener("paste", function () {
+
+        logBrowserEvent(
+            "paste_attempt",
+            "Candidate attempted to paste content"
+        );
+
+    });
+
+
+    document.addEventListener("cut", function () {
+
+        logBrowserEvent(
+            "cut_attempt",
+            "Candidate attempted to cut content"
+        );
+
+    });
+
+
+    document.addEventListener(
+        "contextmenu",
+        function (event) {
+
+            event.preventDefault();
+
+            logBrowserEvent(
+                "right_click",
+                "Candidate attempted right click"
+            );
+
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        function () {
+
+            logBrowserEvent(
+                "keyboard_activity",
+                "Candidate pressed a keyboard key"
+            );
+
+        }
+    );
+
+
+    let lastMouseEventTime = 0;
+
+
+    document.addEventListener(
+        "mousemove",
+        function () {
+
+            const now = Date.now();
+
+            if (now - lastMouseEventTime >= 5000) {
+
+                lastMouseEventTime = now;
+
+                logBrowserEvent(
+                    "mouse_activity",
+                    "Candidate moved mouse"
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+        .querySelectorAll(
+            'input[name="answer"]'
+        )
+        .forEach(function (option) {
+
+            option.addEventListener(
+                "change",
+                function () {
+
+                    logBrowserEvent(
+                        "answer_selected",
+                        "Candidate selected an answer"
+                    );
+
+                }
+            );
+
+        });
+
+
+    function submitAnswer() {
+
+        logBrowserEvent(
+            "answer_saved",
+            "Candidate saved answer"
+        );
+
+        alert("Answer saved successfully");
+
+    }
+
+
+    /* ================= SESSION LIFECYCLE ================= */
+
+    const pauseBtn =
+        document.getElementById("pauseBtn");
+
+    const resumeBtn =
+        document.getElementById("resumeBtn");
+
+    const submitBtn =
+        document.getElementById("submitBtn");
+
+    const sessionBadge =
+        document.getElementById("session-badge");
+
+
+    pauseBtn.addEventListener(
+        "click",
+        function () {
+
+            fetch("/pause-exam", {
+                method: "POST"
+            })
+
+            .then(r => r.json())
+
+            .then(() => {
+
+                sessionBadge.textContent =
+                    "paused";
+
+                sessionBadge.className =
+                    "badge badge-paused";
+
+                pauseBtn.style.display =
+                    "none";
+
+                resumeBtn.style.display =
+                    "inline-block";
+
+
+                logBrowserEvent(
+                    "exam_paused",
+                    "Candidate paused the exam"
+                );
+
+            });
+
+        }
+    );
+
+
+    resumeBtn.addEventListener(
+        "click",
+        function () {
+
+            fetch("/resume-exam", {
+                method: "POST"
+            })
+
+            .then(r => r.json())
+
+            .then(() => {
+
+                sessionBadge.textContent =
+                    "in progress";
+
+                sessionBadge.className =
+                    "badge badge-progress";
+
+                resumeBtn.style.display =
+                    "none";
+
+                pauseBtn.style.display =
+                    "inline-block";
+
+
+                logBrowserEvent(
+                    "exam_resumed",
+                    "Candidate resumed the exam"
+                );
+
+            });
+
+        }
+    );
+
+
+    submitBtn.addEventListener(
+        "click",
+        function () {
+
+            if (!confirm(
+                "Submit your exam now? You won't be able to make further changes."
+            )) {
+                return;
+            }
+
+
+            fetch("/submit-exam", {
+                method: "POST"
+            })
+
+            .then(r => r.json())
+
+            .then(data => {
+
+                sessionBadge.textContent =
+                    "submitted";
+
+                sessionBadge.className =
+                    "badge badge-submitted";
+
+
+                alert(
+                    "Exam submitted successfully."
+                );
+
+
+                window.location.href =
+                    data.redirect || "/dashboard";
+
+            });
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

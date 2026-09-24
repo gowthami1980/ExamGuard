@@ -1,9 +1,13 @@
-from flask import Flask, redirect, request, render_template, session, redirect 
+from flask import Flask, redirect, request, render_template, session
 from database import init_db, get_db
-from werkzeug.security import check_password_hash, generate_password_hash,check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import os
 from camera import capture_photo
+from monitoring.face_monitoring import detect_face
+import sqlite3
+import uuid
+
 
 app = Flask(__name__)
 app.secret_key = "examguard_secret_key"
@@ -75,10 +79,10 @@ def register():
 
         connection.execute(
             """
-            INSERT INTO candidates(name, email, password, photo)
-            VALUES(?, ?, ?, ?)
+            INSERT INTO candidates(name, email, password, photo, created_at)
+            VALUES(?, ?, ?, ?, ?)
             """,
-            (username, email, generate_password_hash(password), photo_path)
+            (username, email, generate_password_hash(password), photo_path, datetime.now().isoformat())
         )
         connection.commit()
         # connection.close()
@@ -138,6 +142,53 @@ def dashboard():
         return "Please login first"
 
     return render_template("dashboard.html")
+
+
+@app.route("/monitor-face",methods = ["POST"] )
+def monitor_face():
+    if "candidate_id" not in session :
+        return {
+            "success" : False,
+            "message" : "Candidate is not logged in"
+        },401
+    candidate_id = session["candidate_id"]
+    exam_session_id = session.get("exam_session_id")
+
+    if not exam_session_id :
+        return {
+            "success" : False,
+            "message" : "Exam not started" 
+
+        },400
+    image_data = image.read()
+
+    face_present = detect_face(image_data)
+
+    if face_present: 
+        current_state = "face_detected"
+    else :
+        current_state = "face_absent"
+
+    log_face_state(
+        candidate_id , exam_session_id , current_state 
+    )
+    return {
+        "success": True,
+        "state" : current_state
+    }
+
+@app.route("/start-exam")
+def start_exam():
+    if "candidate_id" not in session :
+        return {
+            "success" : False,
+            "message" : "Candidate is not logged in"
+        },401
+    exam_session_id = str(
+        uuid.uuid4()
+    )
+    session["exam_session_id"] = exam_session_id
+    return render_template("exam.html")
 
 
 @app.route("/logout")
