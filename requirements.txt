@@ -1,1 +1,14 @@
-python -m pip install flask
+Flask>=3.0
+Werkzeug>=3.0
+opencv-python>=4.9
+numpy>=1.26
+Faker>=24.0
+
+opencv-python
+numpy
+
+langchain
+langchain-core
+langchain-openai
+
+openai

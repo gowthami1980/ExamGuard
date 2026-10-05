@@ -6,32 +6,268 @@
     <title>Examination — ExamGuard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        #camera {
-            width: 100%;
-            max-width: 360px;
-            border-radius: 4px;
-            background: #000;
-            display: block;
-            margin-top: 10px;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #fff0f5;
+        color: #3f2933;
+    }
 
-        #canvas { display: none; }
+    .navbar {
+        background: #d85a8a;
+        color: white;
+        padding: 16px 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .navbar-brand {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .logo-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        margin-right: 7px;
+    }
+
+    .navbar-links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page {
+        width: 88%;
+        max-width: 1100px;
+        margin: 30px auto;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        border: 1px solid #f3c7d7;
+    }
+
+    h1 {
+        color: #b83f70;
+        margin-top: 0;
+    }
+
+    h3 {
+        color: #b83f70;
+        margin-top: 0;
+    }
+
+    .subtitle {
+        color: #6f5a63;
+        line-height: 1.6;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        border: none;
+        padding: 11px 20px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background: #d85a8a;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #bd4775;
+    }
+
+    .btn-secondary {
+        background: #f3d3df;
+        color: #8f3159;
+    }
+
+    .btn-secondary:hover {
+        background: #eab8cb;
+    }
+
+    .btn-danger {
+        background: #c94f72;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #aa3d5d;
+    }
+
+    .monitor-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+    }
+
+    .status-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 0;
+        border-bottom: 1px solid #f4dce5;
+    }
+
+    .status-label {
+        font-weight: bold;
+        min-width: 120px;
+    }
+
+    .status-value {
+        color: #6d5962;
+    }
+
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .dot-good {
+        background: #42a765;
+    }
+
+    .dot-bad {
+        background: #42a765;
+    }
+
+    .dot-neutral {
+        background: #aaa;
+    }
+
+    #camera {
+        width: 100%;
+        max-width: 420px;
+        border-radius: 10px;
+        background: #1f1f1f;
+        display: block;
+        margin: 18px auto 0;
+        border: 3px solid #f0b6cb;
+    }
+
+    #canvas {
+        display: none;
+    }
+
+    .option {
+        display: block;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #f0d4df;
+        border-radius: 7px;
+        cursor: pointer;
+        background: #fff9fb;
+    }
+
+    .option:hover {
+        background: #fff0f5;
+        border-color: #d85a8a;
+    }
+
+    .option input {
+        margin-right: 8px;
+    }
+
+    pre {
+        background: #fff0f5 !important;
+        border: 1px solid #f3c7d7;
+        color: #4b3440;
+        overflow-x: auto;
+    }
+
+    .badge {
+        padding: 7px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .badge-progress {
+        background: #f7d5e2;
+        color: #8f3159;
+    }
+
+    .badge-paused {
+        background: #ffe1a8;
+        color: #805600;
+    }
+
+    .badge-submitted {
+        background: #ccebd7;
+        color: #24643b;
+    }
+
+    .console {
+        height: 180px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px;
+        border: 1px solid #f0cbd9;
+        border-radius: 8px;
+        background: #fff9fb;
+        box-sizing: border-box;
+    }
+
+    .console-line {
+        padding: 6px 0;
+        white-space: normal;
+        word-break: break-word;
+        border-bottom: 1px solid #f7e4eb;
+    }
+
+    .console-line .t {
+        color: #b83f70;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .console-line.flag {
+        color: #b83f70;
+        font-weight: bold;
+    }
+
+    @media (max-width: 720px) {
+
+        .page {
+            width: 94%;
+        }
 
         .monitor-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            grid-template-columns: 1fr;
         }
 
-        @media (max-width: 720px) {
-            .monitor-grid { grid-template-columns: 1fr; }
+        .navbar {
+            padding: 15px 20px;
         }
 
-        .option {
-            display: block;
-            padding: 10px 0;
-            font-size: 15px;
+        .navbar-brand {
+            font-size: 20px;
         }
+
+    }
     </style>
 </head>
 
@@ -46,20 +282,17 @@
             <span id="session-badge" class="badge badge-progress">
                 in progress
             </span>
+            <a href="{{ url_for('logout') }}"
+                class="btn btn-secondary"
+                style="text-decoration:none;">
+                Logout
+            </a>
         </div>
     </header>
 
     <main class="page">
 
         <div class="card" style="margin-bottom:24px;">
-            <h1>Examination in progress</h1>
-
-            <p class="subtitle">
-                {% if candidate_name %}
-                    Candidate: {{ candidate_name }} —
-                {% endif %}
-                keep this tab focused and your face within the camera frame.
-            </p>
 
             <div class="btn-row">
                 <button id="pauseBtn" class="btn btn-secondary">
@@ -134,55 +367,382 @@
 
             </div>
 
-
             <div class="card">
 
-                <h3>Question 1</h3>
+    <h3>Question 1</h3>
 
-                <p>
-                    What is the output of the following Python code?
-                </p>
+    <p>What is the output of the following Python code?</p>
 
-                <pre style="background:var(--paper);
-                            padding:12px;
-                            border-radius:3px;">x = 10
+    <pre style="background:var(--paper);
+                padding:12px;
+                border-radius:3px;">x = 10
 print(x + 5)</pre>
 
-                <label class="option">
-                    <input type="radio"
-                           name="answer"
-                           value="10">
-                    10
-                </label>
+    <label class="option">
+        <input type="radio" name="q1" value="10">
+        10
+    </label>
 
-                <label class="option">
-                    <input type="radio"
-                           name="answer"
-                           value="15">
-                    15
-                </label>
+    <label class="option">
+        <input type="radio" name="q1" value="15">
+        15
+    </label>
 
-                <label class="option">
-                    <input type="radio"
-                           name="answer"
-                           value="20">
-                    20
-                </label>
+    <label class="option">
+        <input type="radio" name="q1" value="20">
+        20
+    </label>
 
-                <label class="option">
-                    <input type="radio"
-                           name="answer"
-                           value="25">
-                    25
-                </label>
+    <label class="option">
+        <input type="radio" name="q1" value="25">
+        25
+    </label>
 
-                <button class="btn btn-primary"
-                        style="margin-top:14px;"
-                        onclick="submitAnswer()">
-                    Save answer
-                </button>
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
 
-            </div>
+</div>
+
+
+<div class="card">
+
+    <h3>Question 2</h3>
+
+    <p>What is the data type of the value <b>25</b> in Python?</p>
+
+    <label class="option">
+        <input type="radio" name="q2" value="Boolean">
+        Boolean
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q2" value="Integer">
+        Integer
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q2" value="Character">
+        Character
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q2" value="Float">
+        Float
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 3</h3>
+
+    <p>What is the data type of <b>True</b> in Python?</p>
+
+    <label class="option">
+        <input type="radio" name="q3" value="Integer">
+        Integer
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q3" value="String">
+        String
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q3" value="Boolean">
+        Boolean
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q3" value="Float">
+        Float
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 4</h3>
+
+    <p>What is the output of the following Python code?</p>
+
+    <pre style="background:var(--paper);
+                padding:12px;
+                border-radius:3px;">x = 5
+y = 4
+print(x * y)</pre>
+
+    <label class="option">
+        <input type="radio" name="q4" value="9">
+        9
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q4" value="20">
+        20
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q4" value="25">
+        25
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q4" value="1">
+        1
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 5</h3>
+
+    <p>What is the data type of <b>3.14</b> in Python?</p>
+
+    <label class="option">
+        <input type="radio" name="q5" value="Integer">
+        Integer
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q5" value="Boolean">
+        Boolean
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q5" value="Float">
+        Float
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q5" value="Character">
+        Character
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 6</h3>
+
+    <p>What is the output of the following Python code?</p>
+
+    <pre style="background:var(--paper);
+                padding:12px;
+                border-radius:3px;">x = 20
+y = 10
+print(x - y)</pre>
+
+    <label class="option">
+        <input type="radio" name="q6" value="5">
+        5
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q6" value="10">
+        10
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q6" value="20">
+        20
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q6" value="30">
+        30
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 7</h3>
+
+    <p>What is the data type of <b>"ExamGuard"</b> in Python?</p>
+
+    <label class="option">
+        <input type="radio" name="q7" value="Integer">
+        Integer
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q7" value="String">
+        String
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q7" value="Boolean">
+        Boolean
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q7" value="Float">
+        Float
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 8</h3>
+
+    <p>What is the output of the following Python code?</p>
+
+    <pre style="background:var(--paper);
+                padding:12px;
+                border-radius:3px;">x = 10
+y = 5
+print(x + y * 2)</pre>
+
+    <label class="option">
+        <input type="radio" name="q8" value="30">
+        30
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q8" value="20">
+        20
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q8" value="15">
+        15
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q8" value="25">
+        25
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 9</h3>
+
+    <p>What is the output of the following Python code?</p>
+
+    <pre style="background:var(--paper);
+                padding:12px;
+                border-radius:3px;">x = 7
+print(x * 2)</pre>
+
+    <label class="option">
+        <input type="radio" name="q9" value="9">
+        9
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q9" value="12">
+        12
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q9" value="14">
+        14
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q9" value="16">
+        16
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Question 10</h3>
+
+    <p>Which of the following is a Boolean value in Python?</p>
+
+    <label class="option">
+        <input type="radio" name="q10" value="10">
+        10
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q10" value="True">
+        True
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q10" value="3.14">
+        3.14
+    </label>
+
+    <label class="option">
+        <input type="radio" name="q10" value="Hello">
+        "Hello"
+    </label>
+
+    <button class="btn btn-primary"
+            style="margin-top:14px;"
+            onclick="submitAnswer()">
+        Save answer
+    </button>
+
+</div>    
 
         </div>
 
@@ -545,25 +1105,18 @@ print(x + 5)</pre>
 
 
     document
-        .querySelectorAll(
-            'input[name="answer"]'
-        )
-        .forEach(function (option) {
-
-            option.addEventListener(
-                "change",
-                function () {
-
-                    logBrowserEvent(
-                        "answer_selected",
-                        "Candidate selected an answer"
-                    );
-
-                }
-            );
-
-        });
-
+    .querySelectorAll('input[type="radio"]')
+    .forEach(function (option) {
+        option.addEventListener(
+            "change",
+            function () {
+                logBrowserEvent(
+                    "answer_selected",
+                    "Candidate selected an answer"
+                );
+            }
+        );
+    });
 
     function submitAnswer() {
 
