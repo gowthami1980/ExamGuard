@@ -6,10 +6,11 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import init_db, get_db
-from camera import capture_photo
-from monitoring.face_monitoring import detect_face
+from camera import save_captured_photo
+from monitoring.face_monitoring import detect_face, close_open_face_event
 from monitoring.face_logger import log_face_state
 from monitoring import event_detector
+from monitoring.incident_logger import create_incident
 from monitoring.integrity_score import compute_integrity_score
 
 from ai.integrity_agent import generate_real_integrity_report
@@ -126,7 +127,7 @@ def capture_candidate_photo():
 
     image_data = photo.read()
 
-    photo_path = capture_photo(image_data)
+    photo_path = save_captured_photo(image_data)
 
     if not photo_path:
         return {
@@ -446,7 +447,8 @@ def submit_exam():
     # ------------------------------------------------
     # 3. Calculate final integrity score
     # ------------------------------------------------
-
+    close_open_face_event(candidate_id, exam_session_id)
+    
     result = compute_integrity_score(
         candidate_id,
         exam_session_id
@@ -653,7 +655,7 @@ def log_browser_event():
 
         connection.commit()
 
-        event_detector.evaluate_browser_event(
+        suspicious_event = event_detector.evaluate_browser_event(
             connection,
             candidate_id,
             exam_session_id,
