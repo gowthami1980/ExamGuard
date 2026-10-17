@@ -1,3 +1,25 @@
+/* ==============================================================
+   ExamGuard — shared styles
+   Design concept: an official examination hall crossed with a
+   monitoring console. Quiet, paper-toned pages for forms and
+   records; the live event log is the one place that gets to look
+   like an active instrument (dark, monospaced, blinking status).
+   ============================================================== */
+
+:root {
+    --bg: #101614;
+    --header: #18221e;
+    --card: #202c26;
+    --border: #34483b;
+    --text: #edf5ef;
+    --muted: #a4b5a8;
+
+    --primary: #16865d;
+    --primary-hover: #116b4b;
+    --accent: #6ee7b7;
+}
+
+
 * {
     margin: 0;
     padding: 0;
@@ -7,463 +29,323 @@
 
 body {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at 10% 10%, #ffdce8 0%, transparent 30%),
-        radial-gradient(circle at 90% 15%, #e7ddff 0%, transparent 30%),
-        radial-gradient(circle at 80% 90%, #ffe9d6 0%, transparent 30%),
-        #fff8fb;
-    color: #403647;
-    text-align: center;
+    background: var(--bg);
+    color: var(--text);
 }
 
+/* Navigation */
 
-/* Main Heading */
-
-h1 {
-    margin-top: 55px;
-    margin-bottom: 10px;
-    color: #54364d;
-    font-size: 32px;
-    letter-spacing: 0.5px;
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 5%;
+    background: var(--header);
+    border-bottom: 1px solid var(--border);
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-size: 22px;
+    font-weight: bold;
+}
 
-/* Registration Card */
+.logo-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: white;
+}
+
+/* Main Page */
+
+.page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* General Cards */
+
+.card,
+.dashboard-card,
+.login-container,
+.dashboard-container,
+form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card {
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+/* Headings */
+
+h1,
+h2,
+h3 {
+    color: var(--text);
+    margin-bottom: 15px;
+}
+
+p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* Forms */
 
 form {
-    width: 420px;
-    max-width: 92%;
-    margin: 30px auto 60px;
-    padding: 34px;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid #f0cbdc;
-    border-radius: 22px;
-    box-shadow: 0 18px 45px rgba(135, 79, 108, 0.15);
-    text-align: left;
+    width: 100%;
+    max-width: 600px;
+    margin: 25px auto;
+    padding: 25px;
 }
-
-
-/* Labels */
 
 label {
     display: block;
-    margin-bottom: 7px;
-    color: #65475d;
+    margin: 15px 0 7px;
+    color: var(--text);
     font-size: 14px;
     font-weight: bold;
 }
 
-
-/* Input Box */
-
-.input-box {
-    position: relative;
+input,
+textarea,
+select {
     width: 100%;
-}
-
-
-/* Icon inside Input */
-
-.input-box > i:first-child {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ee72a2;
+    padding: 12px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 7px;
     font-size: 14px;
 }
 
-
-/* Input */
-
-.input-box input {
-    width: 100%;
-    padding: 12px 42px 12px 40px;
-    background: #fffafd;
-    border: 1px solid #dfc7d5;
-    border-radius: 9px;
-    color: #403647;
-    font-size: 14px;
-    transition: 0.25s;
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
 }
 
-.input-box input:focus {
-    outline: none;
-    background: #ffffff;
-    border-color: #d48aae;
-    box-shadow: 0 0 0 3px rgba(212, 138, 174, 0.12);
-}
+/* Buttons */
 
-
-/* Password Eye */
-
-.password-eye {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #a477d1;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.password-eye:hover {
-    color: #d6659a;
-}
-
-
-/* Candidate Photo */
-
-h3 {
-    margin-top: 5px;
-    margin-bottom: 14px;
-    color: #65475d;
-    font-size: 18px;
-}
-
-h3 i {
-    color: #ee72a2;
-    margin-right: 6px;
-}
-
-
-/* Camera */
-
-#camera {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-    margin: 15px auto;
-    background: #241c27;
-    border: 3px solid #e6a6c3;
-    border-radius: 16px;
-    box-shadow: 0 8px 22px rgba(160, 87, 123, 0.15);
-}
-
-
-/* Canvas */
-
-#canvas {
-    display: none;
-}
-
-
-/* Captured Photo */
-
-#preview {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: none;
-    margin: 15px auto;
-    border-radius: 16px;
-    border: 3px solid #b9a3df;
-    box-shadow: 0 8px 22px rgba(117, 92, 155, 0.15);
-}
-
-
-/* Camera Buttons */
-
+button,
+.login-btn,
+.start-exam-btn,
 #startCamera,
-#capturePhoto {
-    width: 48%;
-    display: inline-block;
-    margin: 5px 1%;
-    padding: 12px 6px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #d978a5, #b98bd8);
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-
-/* Button Icons */
-
-#startCamera i,
-#capturePhoto i,
-#registerButton i {
-    margin-right: 6px;
-}
-
-
-/* Button Hover */
-
-#startCamera:hover,
-#capturePhoto:hover {
-    background: linear-gradient(135deg, #c96594, #a878ca);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(187, 112, 155, 0.22);
-}
-
-
-/* Disabled Capture */
-
-#capturePhoto:disabled {
-    background: #d9cfd6;
-    color: #91848d;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-
-/* Photo Status */
-
-#photoStatus {
-    text-align: center;
-    min-height: 18px;
-    margin-top: 10px;
-    color: #9a6682;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-
-/* Register */
-
+#capturePhoto,
 #registerButton {
-    width: 100%;
-    margin-top: 5px;
-    padding: 13px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(100deg, #d978a5, #b38bd7, #e8a47c);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    background: var(--primary);
     color: white;
-    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.25s;
-    box-shadow: 0 7px 20px rgba(194, 113, 153, 0.18);
+    text-decoration: none;
+    transition: 0.2s;
 }
 
+button:hover,
+.login-btn:hover,
+.start-exam-btn:hover,
+#startCamera:hover,
+#capturePhoto:hover,
 #registerButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(194, 113, 153, 0.25);
+    background: var(--primary-hover);
+    transform: translateY(-1px);
 }
 
-
-/* Disabled Register */
-
+button:disabled,
+#capturePhoto:disabled,
 #registerButton:disabled {
-    background: #d9d4d8;
-    color: #888087;
+    background: #334155;
+    color: #94a3b8;
     cursor: not-allowed;
-    box-shadow: none;
     transform: none;
 }
 
-
-/* ================================= */
-/* LOGIN PAGE */
-/* ================================= */
+/* Login */
 
 .login-container {
     width: 430px;
-    max-width: 92%;
-    margin: 75px auto;
-    padding: 35px 38px;
-    background: rgba(255, 255, 255, 0.96);
-    border: 1px solid #f0cbdc;
-    border-radius: 24px;
-    box-shadow: 0 18px 45px rgba(135, 79, 108, 0.15);
-    text-align: left;
+    max-width: 95%;
+    margin: 60px auto;
+    padding: 30px;
 }
-
-
-/* Login Icon */
-
-.login-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff0f6;
-    border: 2px solid #e6a6c3;
-    border-radius: 50%;
-    color: #d978a5;
-    font-size: 25px;
-}
-
-
-/* Login Heading */
-
-.login-container h1 {
-    margin: 0;
-    text-align: center;
-    color: #54364d;
-    font-size: 30px;
-}
-
-
-/* Login Subtitle */
-
-.login-subtitle {
-    margin: 8px 0 28px;
-    text-align: center;
-    color: #8b7180;
-    font-size: 13px;
-}
-
-
-/* Login Form */
 
 .login-container form {
-    width: 100%;
     max-width: none;
     margin: 0;
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: 0;
     box-shadow: none;
 }
 
-
-/* Login Labels */
-
-.login-container label {
-    margin-top: 18px;
-    margin-bottom: 7px;
-}
-
-
-/* Login Button */
-
-.login-btn {
-    width: 100%;
-    margin-top: 25px;
-    padding: 13px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #d978a5, #b98bd8);
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(187, 112, 155, 0.25);
-}
-
-.login-btn i {
-    margin-right: 6px;
-}
-
-
-/* ================================= */
-/* DASHBOARD */
-/* ================================= */
-
-.dashboard-container {
-    width: 520px;
-    max-width: 92%;
-    margin: 90px auto;
-    padding: 42px;
-    background: rgba(255, 255, 255, 0.96);
-    border: 1px solid #f0cbdc;
-    border-radius: 24px;
-    box-shadow: 0 18px 45px rgba(135, 79, 108, 0.15);
-    text-align: center;
-}
-
-
-/* Dashboard Icon */
-
-.dashboard-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 18px;
+.login-icon {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff0f6;
-    border: 2px solid #e6a6c3;
+    color: var(--accent);
+    border: 1px solid var(--border);
     border-radius: 50%;
-    color: #d978a5;
-    font-size: 25px;
 }
 
+/* Candidate Dashboard */
 
-/* Dashboard Heading */
-
-.dashboard-container h1 {
-    margin: 0 0 10px;
-    color: #54364d;
-    font-size: 30px;
+.dashboard-container {
+    max-width: 850px;
+    width: 95%;
+    margin: 30px auto;
+    padding: 30px;
 }
-
-
-/* Welcome Text */
-
-.welcome-text {
-    margin-bottom: 28px;
-    color: #806b78;
-    font-size: 14px;
-}
-
-.welcome-text i {
-    color: #d978a5;
-    margin-right: 5px;
-}
-
-
-/* Dashboard Card */
 
 .dashboard-card {
     display: flex;
     align-items: center;
     gap: 15px;
     padding: 18px;
-    margin-bottom: 28px;
-    background: #fff7fb;
-    border: 1px solid #efd1df;
-    border-radius: 14px;
-    text-align: left;
+    margin: 20px 0;
 }
 
-.dashboard-card > i {
-    color: #b98bd8;
-    font-size: 27px;
+.dashboard-card i {
+    color: var(--accent);
+    font-size: 25px;
 }
 
-.dashboard-card h3 {
-    margin: 0 0 5px;
-    color: #65475d;
-    font-size: 16px;
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
 }
 
-.dashboard-card p {
+/* Remove extra form box around Start Exam */
+
+.dashboard-actions form {
+    width: auto;
     margin: 0;
-    color: #8b7180;
-    font-size: 13px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
+/* Exam Screen */
 
-/* Logout */
-
-.logout-btn {
-    display: inline-block;
-    padding: 12px 30px;
-    background: linear-gradient(135deg, #d978a5, #b98bd8);
-    color: white;
-    text-decoration: none;
+#camera,
+#preview {
+    width: 100%;
+    max-width: 500px;
+    height: 280px;
+    object-fit: cover;
+    background: #020617;
+    border: 1px solid var(--border);
     border-radius: 10px;
-    font-weight: bold;
-    transition: 0.25s;
+    margin: 15px 0;
 }
 
-.logout-btn:hover {
-    background: linear-gradient(135deg, #c96594, #a878ca);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(187, 112, 155, 0.22);
+#canvas {
+    display: none;
+}
+
+#photoStatus {
+    color: var(--accent);
+    margin: 10px 0;
+}
+
+/* Monitoring status */
+
+.status,
+.welcome-text {
+    color: var(--muted);
+}
+
+.status-active {
+    color: #34d399;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 14px 18px;
+    }
+
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .page {
+        padding: 0 12px;
+        margin: 20px auto;
+    }
+
+    .dashboard-container,
+    .login-container {
+        padding: 20px;
+    }
+
+    .dashboard-actions {
+        flex-direction: column;
+    }
+
+    .dashboard-actions button,
+    .dashboard-actions a {
+        width: 100%;
+    }
+}
+
+.logo-symbol {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+/* Camera preview size */
+#camera,
+#preview {
+    width: 320px;
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: 15px 0;
+    border-radius: 10px;
 }

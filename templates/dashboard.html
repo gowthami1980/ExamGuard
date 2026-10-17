@@ -1,151 +1,390 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>ExamGuard Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamGuard | Dashboard</title>
 
     <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #fff0f5;
-        color: #3f2933;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    .header {
-        background: #d85a8a;
-        color: white;
-        padding: 18px 35px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f7f4;
+            color: #24352c;
+        }
 
-    .header h1 {
-        margin: 0;
-        font-size: 24px;
-        color: white;
-    }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #dce7df;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .logout-btn {
-        background: #f3d3df;
-        color: #8f3159;
-        padding: 10px 18px;
-        border-radius: 7px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14px;
-    }
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            color: #18794e;
+        }
 
-    .logout-btn:hover {
-        background: #eab8cb;
-    }
+        .brand small {
+            display: block;
+            margin-top: 4px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #718078;
+        }
 
-    .container {
-        width: 88%;
-        max-width: 1100px;
-        margin: 35px auto;
-    }
+        .logout {
+            text-decoration: none;
+            color: #38634c;
+            border: 1px solid #cbded0;
+            padding: 10px 17px;
+            border-radius: 7px;
+        }
 
-    .welcome-box,
-    .exam-box {
-        background: white;
-        border-radius: 12px;
-        padding: 28px;
-        margin-bottom: 24px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        border: 1px solid #f3c7d7;
-    }
+        .logout:hover {
+            background: #edf7ef;
+        }
 
-    .welcome-box h2,
-    .exam-box h2 {
-        color: #b83f70;
-        margin-top: 0;
-    }
-
-    .welcome-box p,
-    .exam-box p {
-        color: #6f5a63;
-        line-height: 1.6;
-        font-size: 16px;
-    }
-
-    .exam-box {
-        text-align: center;
-    }
-
-    .start-btn {
-        display: inline-block;
-        margin-top: 12px;
-        background: #d85a8a;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 7px;
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    .start-btn:hover {
-        background: #bd4775;
-    }
-
-    @media (max-width: 720px) {
         .container {
-            width: 94%;
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 0 20px;
         }
 
-        .header {
-            padding: 15px 20px;
+        .welcome {
+            margin-bottom: 25px;
         }
 
-        .header h1 {
-            font-size: 20px;
+        h1 {
+            font-size: 29px;
+            margin: 0 0 10px;
         }
-    }
-</style>
+
+        .subtitle {
+            color: #718078;
+            line-height: 1.6;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 15px;
+            background: #e1f5e8;
+            color: #18794e;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #dce7df;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(30, 70, 45, 0.04);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #718078;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #24352c;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .card-title {
+            margin: 0 0 16px;
+            font-size: 19px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5ece7;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #d9f3e3;
+            color: #18794e;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .email {
+            color: #718078;
+            font-size: 13px;
+            margin-top: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .detail span {
+            color: #718078;
+        }
+
+        .detail strong {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .green {
+            color: #18794e;
+        }
+
+        .start-card {
+            border-top: 3px solid #26945e;
+        }
+
+        .start-description {
+            color: #718078;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .info-line {
+            padding: 13px 0;
+            border-top: 1px solid #e5ece7;
+            font-size: 14px;
+        }
+
+        .info-line span {
+            color: #718078;
+            display: block;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .start-btn {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            padding: 15px;
+            background: #218653;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #176b40;
+        }
+
+        .history {
+            margin-top: 20px;
+        }
+
+        .session {
+            padding: 14px 0;
+            border-top: 1px solid #e5ece7;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .session p {
+            color: #718078;
+            margin-bottom: 0;
+        }
+
+        .empty {
+            color: #718078;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
 </head>
 
-
 <body>
+    <header class="navbar">
+        <div class="brand">
+            ExamGuard
+            <small>CANDIDATE PORTAL</small>
+        </div>
 
+        <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+    </header>
 
-    <!-- HEADER -->
+    <main class="container">
 
-    <div class="header">
+        <section class="welcome">
+            <h1>Welcome, {{ candidate['name'] }}!</h1>
+            <div class="subtitle">
+                Your examination portal is ready. Review your details before starting.
+            </div>
+            <span class="status">● Account Active</span>
+        </section>
 
-        <h1>ExamGuard</h1>
+        <section class="stats">
+            <div class="card">
+                <div class="stat-label">Questions</div>
+                <div class="stat-value">10</div>
+            </div>
 
-        <a href="{{ url_for('logout') }}"
-           class="logout-btn">
-            Logout
-        </a>
+            <div class="card">
+                <div class="stat-label">Exam Duration</div>
+                <div class="stat-value">30 Minutes</div>
+            </div>
 
-    </div>
+            <div class="card">
+                <div class="stat-label">Monitoring</div>
+                <div class="stat-value green">Enabled</div>
+            </div>
+        </section>
 
+        <section class="main-grid">
 
-    <!-- MAIN CONTENT -->
+            <div>
+                <div class="card start-card">
+                    <h2 class="card-title">Ready to Start?</h2>
 
-    <div class="container">
+                    <p class="start-description">
+                        Complete your examination in the exam room.
+                        Your answers and monitoring events can be recorded
+                        during the session.
+                    </p>
 
-    <div class="welcome-box">
-        <h2>Welcome to ExamGuard Examination</h2>
+                    <div class="info-line">
+                        Before you begin
+                        <span>Allow camera access and keep your face visible.</span>
+                    </div>
 
-        <a href="{{ url_for('start_exam') }}" class="start-btn">
-            Start Exam
-        </a>
-    </div>
+                    <div class="info-line">
+                        During the exam
+                        <span>Answer the questions and avoid switching tabs.</span>
+                    </div>
 
-    </div>
+                    <a class="start-btn" href="{{ url_for('start_exam') }}">
+                        Start Exam →
+                    </a>
+                </div>
 
+                <div class="card history">
+                    <h2 class="card-title">Previous Attempts</h2>
 
+                    {% if recent_sessions %}
+                        {% for item in recent_sessions %}
+                            <div class="session">
+                                <strong>
+                                    Session: {{ item['session_id'][:13] }}...
+                                </strong>
+                                <p>
+                                    Status: {{ item['status'] }}
+                                    {% if item['started_at'] %}
+                                        <br>Started: {{ item['started_at'] }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="empty">
+                            No previous attempts yet. Your exam history will appear here.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <aside class="card">
+                <h2 class="card-title">Candidate Details</h2>
+
+                <div class="profile">
+                    <div class="avatar">
+                        {{ candidate['name'][0]|upper }}
+                    </div>
+
+                    <div>
+                        <div class="profile-name">{{ candidate['name'] }}</div>
+                        <div class="email">{{ candidate['email'] }}</div>
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <span>Candidate ID</span>
+                    <strong>#{{ candidate['id'] }}</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Photo Registration</span>
+                    <strong class="green">Completed</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Account</span>
+                    <strong>Registered</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Portal</span>
+                    <strong class="green">ExamGuard</strong>
+                </div>
+            </aside>
+
+        </section>
+    </main>
 </body>
-
 </html>

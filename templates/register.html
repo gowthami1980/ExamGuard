@@ -1,17 +1,1391 @@
-<!DOCTYPE html>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
 
-    <title>ExamGuard Registration</title>
+    <meta charset="UTF-8">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <!-- Icons -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>ExamGuard | Candidate Registration</title>
+
+
+    <style>
+
+        /* =====================================================
+           DESIGN SYSTEM
+        ===================================================== */
+
+        :root {
+
+            --green: #16a34a;
+            --green-dark: #15803d;
+            --green-deep: #14532d;
+
+            --green-soft: #f0fdf4;
+            --green-light: #dcfce7;
+
+            --dark: #111827;
+            --dark-2: #1f2937;
+
+            --text: #17201c;
+            --muted: #6b7280;
+
+            --border: #e5e7eb;
+
+            --background: #f7f9f8;
+
+            --white: #ffffff;
+
+            --danger: #dc2626;
+
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+
+                radial-gradient(
+                    circle at 5% 5%,
+                    rgba(22, 163, 74, 0.06),
+                    transparent 27%
+                ),
+
+                radial-gradient(
+                    circle at 95% 95%,
+                    rgba(20, 83, 45, 0.05),
+                    transparent 30%
+                ),
+
+                var(--background);
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            height: 68px;
+
+            padding: 0 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background:
+                rgba(255,255,255,0.94);
+
+            backdrop-filter:
+                blur(18px);
+
+            border-bottom:
+                1px solid var(--border);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            color: var(--dark);
+
+            font-size: 19px;
+
+            font-weight: 750;
+
+            letter-spacing: -0.5px;
+
+        }
+
+
+        .brand-mark {
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            background:
+                var(--dark);
+
+            font-size: 15px;
+
+        }
+
+
+        .brand-mark::after {
+
+            content: "";
+
+            width: 7px;
+
+            height: 7px;
+
+            position: absolute;
+
+            margin-left: 25px;
+
+            margin-top: -25px;
+
+            background:
+                var(--green);
+
+            border-radius: 50%;
+
+            border: 2px solid white;
+
+        }
+
+
+        .nav-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #4b5563;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+        }
+
+
+        .nav-status-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(22,163,74,0.10);
+
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+
+            width:
+                min(1000px, calc(100% - 40px));
+
+            margin:
+                40px auto 60px;
+
+        }
+
+
+        /* =====================================================
+           PAGE INTRO
+        ===================================================== */
+
+        .page-intro {
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .page-intro-label {
+
+            color:
+                var(--green-dark);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.2px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .page-intro h1 {
+
+            margin: 0 0 8px;
+
+            color:
+                var(--dark);
+
+            font-size: 31px;
+
+            letter-spacing: -1px;
+
+        }
+
+
+        .page-intro p {
+
+            margin: 0;
+
+            max-width: 650px;
+
+            color:
+                var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .registration-layout {
+
+            display: grid;
+
+            grid-template-columns:
+                0.9fr 1.1fr;
+
+            gap: 20px;
+
+            align-items: start;
+
+        }
+
+
+        /* =====================================================
+           INFORMATION CARD
+        ===================================================== */
+
+        .info-card {
+
+            position: sticky;
+
+            top: 90px;
+
+            padding: 25px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 16px;
+
+            background:
+                var(--dark);
+
+            color: white;
+
+            overflow: hidden;
+
+        }
+
+
+        .info-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 220px;
+
+            height: 220px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            right: -130px;
+
+            top: -120px;
+
+        }
+
+
+        .info-card-content {
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .info-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+
+            color:
+                rgba(255,255,255,0.68);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .info-label span {
+
+            width: 5px;
+
+            height: 5px;
+
+            border-radius: 50%;
+
+            background:
+                #4ade80;
+
+        }
+
+
+        .info-card h2 {
+
+            margin: 0 0 12px;
+
+            font-size: 25px;
+
+            line-height: 1.2;
+
+            letter-spacing: -0.8px;
+
+        }
+
+
+        .info-card > .info-card-content > p {
+
+            margin: 0 0 25px;
+
+            color:
+                rgba(255,255,255,0.57);
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           STEPS
+        ===================================================== */
+
+        .steps {
+
+            display: grid;
+
+            gap: 12px;
+
+        }
+
+
+        .step {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 11px;
+
+        }
+
+
+        .step-number {
+
+            width: 27px;
+
+            height: 27px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 8px;
+
+            color: #86efac;
+
+            background:
+                rgba(74,222,128,0.10);
+
+            border:
+                1px solid
+                rgba(74,222,128,0.15);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .step-text strong {
+
+            display: block;
+
+            margin-bottom: 2px;
+
+            color:
+                rgba(255,255,255,0.88);
+
+            font-size: 11px;
+
+        }
+
+
+        .step-text span {
+
+            color:
+                rgba(255,255,255,0.42);
+
+            font-size: 9px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================================
+           SECURITY BOX
+        ===================================================== */
+
+        .info-security {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 25px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            color:
+                rgba(255,255,255,0.42);
+
+            font-size: 9px;
+
+        }
+
+
+        /* =====================================================
+           FORM CARD
+        ===================================================== */
+
+        .form-card {
+
+            background:
+                white;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 45px
+                rgba(15,23,42,0.06);
+
+        }
+
+
+        .form-header {
+
+            padding:
+                24px 27px;
+
+            border-bottom:
+                1px solid #eef0ef;
+
+        }
+
+
+        .form-header h2 {
+
+            margin: 0 0 5px;
+
+            color:
+                var(--dark);
+
+            font-size: 18px;
+
+            letter-spacing: -0.4px;
+
+        }
+
+
+        .form-header p {
+
+            margin: 0;
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+        }
+
+
+        .form-body {
+
+            padding:
+                27px;
+
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .section-number {
+
+            width: 27px;
+
+            height: 27px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background:
+                var(--green-light);
+
+            color:
+                var(--green-dark);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        .section-heading h3 {
+
+            margin: 0;
+
+            color:
+                var(--dark-2);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =====================================================
+           FORM GROUP
+        ===================================================== */
+
+        .form-group {
+
+            margin-bottom: 17px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color:
+                #374151;
+
+            font-size: 11px;
+
+            font-weight: 650;
+
+        }
+
+
+        .required {
+
+            color:
+                var(--danger);
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            height: 46px;
+
+            padding:
+                0 13px;
+
+            border:
+                1px solid #dfe4e1;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background:
+                #fafbfa;
+
+            color:
+                var(--dark);
+
+            font-size: 12px;
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease,
+                background .2s ease;
+
+        }
+
+
+        input:hover {
+
+            background: white;
+
+            border-color:
+                #c5cec8;
+
+        }
+
+
+        input:focus {
+
+            background: white;
+
+            border-color:
+                var(--green);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(22,163,74,0.08);
+
+        }
+
+
+        input::placeholder {
+
+            color:
+                #a1a8a3;
+
+        }
+
+
+        /* =====================================================
+           CAMERA SECTION
+        ===================================================== */
+
+        .camera-section {
+
+            margin-top: 28px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid #edf0ee;
+
+        }
+
+
+        .camera-description {
+
+            margin:
+                -7px 0 15px 37px;
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =====================================================
+           CAMERA
+        ===================================================== */
+
+        .camera-container {
+
+            position: relative;
+
+            padding: 8px;
+
+            border-radius: 13px;
+
+            background:
+                #0d1511;
+
+            border:
+                1px solid #1f3027;
+
+        }
+
+
+        video {
+
+            width: 100%;
+
+            height: 300px;
+
+            display: block;
+
+            object-fit: cover;
+
+            border-radius: 8px;
+
+            background:
+                #08100c;
+
+        }
+
+
+        .camera-overlay {
+
+            position: absolute;
+
+            top: 17px;
+
+            right: 17px;
+
+            bottom: 17px;
+
+            left: 17px;
+
+            border:
+                1px solid
+                rgba(134,239,172,0.65);
+
+            border-radius: 8px;
+
+            pointer-events: none;
+
+        }
+
+
+        .camera-corner {
+
+            position: absolute;
+
+            width: 17px;
+
+            height: 17px;
+
+            border-color:
+                #4ade80;
+
+            border-style: solid;
+
+            pointer-events: none;
+
+        }
+
+
+        .camera-corner.tl {
+
+            top: 14px;
+
+            left: 14px;
+
+            border-width: 2px 0 0 2px;
+
+        }
+
+
+        .camera-corner.tr {
+
+            top: 14px;
+
+            right: 14px;
+
+            border-width: 2px 2px 0 0;
+
+        }
+
+
+        .camera-corner.bl {
+
+            bottom: 14px;
+
+            left: 14px;
+
+            border-width: 0 0 2px 2px;
+
+        }
+
+
+        .camera-corner.br {
+
+            bottom: 14px;
+
+            right: 14px;
+
+            border-width: 0 2px 2px 0;
+
+        }
+
+
+        .camera-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 8px;
+
+            color:
+                #9ca3af;
+
+            font-size: 9px;
+
+        }
+
+
+        .camera-status-dot {
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background:
+                #6b7280;
+
+        }
+
+
+        /* =====================================================
+           CAMERA BUTTONS
+        ===================================================== */
+
+        .camera-actions {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 9px;
+
+            margin-top: 11px;
+
+        }
+
+
+        button {
+
+            height: 43px;
+
+            border-radius: 9px;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            transition:
+                transform .18s ease,
+                box-shadow .18s ease,
+                background .18s ease;
+
+        }
+
+
+        button:hover:not(:disabled) {
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        #startCamera {
+
+            color: white;
+
+            background:
+                var(--dark);
+
+        }
+
+
+        #startCamera:hover:not(:disabled) {
+
+            background:
+                var(--green-dark);
+
+            box-shadow:
+                0 8px 18px
+                rgba(22,163,74,0.16);
+
+        }
+
+
+        #capturePhoto {
+
+            color:
+                var(--green-dark);
+
+            background:
+                var(--green-light);
+
+            border:
+                1px solid #bbf7d0;
+
+        }
+
+
+        #capturePhoto:hover:not(:disabled) {
+
+            background:
+                #bbf7d0;
+
+        }
+
+
+        button:disabled {
+
+            cursor: not-allowed;
+
+            opacity: 0.55;
+
+        }
+
+
+        /* =====================================================
+           PREVIEW
+        ===================================================== */
+
+        .preview-wrapper {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 11px;
+
+            background:
+                var(--green-soft);
+
+            border:
+                1px solid #d7f1df;
+
+        }
+
+
+        .preview-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-bottom: 9px;
+
+            color:
+                var(--green-dark);
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: .6px;
+
+        }
+
+
+        .preview-title span {
+
+            width: 5px;
+
+            height: 5px;
+
+            border-radius: 50%;
+
+            background:
+                var(--green);
+
+        }
+
+
+        #preview {
+
+            width: 100%;
+
+            max-height: 250px;
+
+            object-fit: cover;
+
+            display: block;
+
+            border-radius: 7px;
+
+        }
+
+
+        #photoStatus {
+
+            min-height: 18px;
+
+            margin:
+                10px 0 0;
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================================
+           SECURITY NOTE
+        ===================================================== */
+
+        .security-note {
+
+            display: flex;
+
+            gap: 9px;
+
+            align-items: flex-start;
+
+            margin-top: 18px;
+
+            padding: 11px 12px;
+
+            border-radius: 8px;
+
+            background:
+                #fafcfb;
+
+            border:
+                1px solid #e8eeea;
+
+            color:
+                #64748b;
+
+            font-size: 9px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .security-icon {
+
+            color:
+                var(--green);
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           REGISTER
+        ===================================================== */
+
+        #registerButton {
+
+            width: 100%;
+
+            margin-top: 16px;
+
+            height: 46px;
+
+            color: white;
+
+            background:
+                var(--dark);
+
+            font-size: 11px;
+
+            font-weight: 750;
+
+        }
+
+
+        #registerButton:hover:not(:disabled) {
+
+            background:
+                var(--green-dark);
+
+            box-shadow:
+                0 9px 20px
+                rgba(22,163,74,0.18);
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer-text {
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            color:
+                #9ca3af;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+
+        }
+
+
+        #canvas {
+
+            display: none;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .registration-layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .info-card {
+
+                position: relative;
+
+                top: auto;
+
+            }
+
+
+            .page {
+
+                width:
+                    min(600px, calc(100% - 25px));
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+
+                padding:
+                    0 18px;
+
+            }
+
+
+            .nav-status {
+
+                display: none;
+
+            }
+
+
+            .page {
+
+                width:
+                    calc(100% - 20px);
+
+                margin:
+                    25px auto 40px;
+
+            }
+
+
+            .page-intro h1 {
+
+                font-size: 27px;
+
+            }
+
+
+            .info-card {
+
+                padding: 22px;
+
+            }
+
+
+            .form-header {
+
+                padding:
+                    21px;
+
+            }
+
+
+            .form-body {
+
+                padding:
+                    22px 20px 25px;
+
+            }
+
+
+            video {
+
+                height: 260px;
+
+            }
+
+
+            .camera-actions {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -19,302 +1393,656 @@
 <body>
 
 
-<div class="form-container">
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+
+    <header class="navbar">
 
 
-    <h2>Candidate Registration</h2>
+        <div class="brand">
 
+            <div class="brand-mark">
+                🛡
+            </div>
 
-    <form method="POST" id="registerForm">
-
-
-        <!-- NAME -->
-
-        <label>
-            <i class="fa-solid fa-user"></i>
-            Full Name
-        </label>
-
-        <div class="input-box">
-
-            <i class="fa-solid fa-user"></i>
-
-            <input
-                type="text"
-                name="name"
-                placeholder="Enter your name"
-                required
-            >
+            ExamGuard
 
         </div>
 
 
-        <br>
+        <div class="nav-status">
 
+            <span class="nav-status-dot"></span>
 
-        <!-- EMAIL -->
-
-        <label>
-            <i class="fa-solid fa-envelope"></i>
-            Email
-        </label>
-
-        <div class="input-box">
-
-            <i class="fa-solid fa-envelope"></i>
-
-            <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                required
-            >
+            Secure registration
 
         </div>
 
 
-        <br>
+    </header>
 
 
-        <!-- PASSWORD -->
 
-        <label>
-            <i class="fa-solid fa-lock"></i>
-            Password
-        </label>
+    <!-- =====================================================
+         PAGE
+    ===================================================== -->
 
-        <div class="input-box">
+    <main class="page">
 
-            <i class="fa-solid fa-lock"></i>
 
-            <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter your password"
-                required
-            >
+        <div class="page-intro">
 
-            <i
-                class="fa-solid fa-eye password-eye"
-                id="togglePassword">
-            </i>
+            <div class="page-intro-label">
+                Candidate onboarding
+            </div>
+
+            <h1>
+                Create your examination account
+            </h1>
+
+            <p>
+                Complete your profile and identity verification
+                before entering the secure examination environment.
+            </p>
 
         </div>
 
 
-        <br><br>
+
+        <div class="registration-layout">
 
 
-        <!-- CAMERA -->
+            <!-- =================================================
+                 LEFT INFORMATION PANEL
+            ================================================== -->
 
-        <h3>
-            <i class="fa-solid fa-camera"></i>
-            Candidate Photo
-        </h3>
-
-
-        <video
-            id="camera"
-            autoplay
-            playsinline
-        ></video>
+            <aside class="info-card">
 
 
-        <br>
+                <div class="info-card-content">
 
 
-        <!-- START CAMERA -->
+                    <div class="info-label">
 
-        <button
-            type="button"
-            id="startCamera"
-        >
+                        <span></span>
 
-            <i class="fa-solid fa-video"></i>
-            Start Camera
+                        Secure onboarding
 
-        </button>
+                    </div>
 
 
-        <!-- CAPTURE PHOTO -->
-
-        <button
-            type="button"
-            id="capturePhoto"
-            disabled
-        >
-
-            <i class="fa-solid fa-camera"></i>
-            Capture Photo
-
-        </button>
+                    <h2>
+                        Get ready for your exam.
+                    </h2>
 
 
-        <!-- CANVAS -->
+                    <p>
 
-        <canvas id="canvas"></canvas>
+                        A few quick steps are required before
+                        you can access your examination session.
 
-
-        <!-- PHOTO PREVIEW -->
-
-        <img
-            id="preview"
-            alt="Captured Photo"
-        >
+                    </p>
 
 
-        <p id="photoStatus"></p>
+
+                    <div class="steps">
 
 
-        <br>
+                        <div class="step">
+
+                            <div class="step-number">
+                                01
+                            </div>
+
+                            <div class="step-text">
+
+                                <strong>
+                                    Account details
+                                </strong>
+
+                                <span>
+                                    Provide your registered
+                                    candidate information.
+                                </span>
+
+                            </div>
+
+                        </div>
 
 
-        <!-- REGISTER -->
 
-        <button
-            type="submit"
-            id="registerButton"
-            disabled
-        >
+                        <div class="step">
 
-            <i class="fa-solid fa-shield-halved"></i>
-            Register
+                            <div class="step-number">
+                                02
+                            </div>
 
-        </button>
+                            <div class="step-text">
+
+                                <strong>
+                                    Identity verification
+                                </strong>
+
+                                <span>
+                                    Capture a clear photo using
+                                    your device camera.
+                                </span>
+
+                            </div>
+
+                        </div>
 
 
-    </form>
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                03
+                            </div>
+
+                            <div class="step-text">
+
+                                <strong>
+                                    Examination access
+                                </strong>
+
+                                <span>
+                                    Register and continue to
+                                    your secure session.
+                                </span>
+
+                            </div>
+
+                        </div>
 
 
-</div>
+                    </div>
+
+
+
+                    <div class="info-security">
+
+                        🔒
+
+                        <span>
+                            Your examination session is protected
+                            by ExamGuard monitoring.
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </aside>
+
+
+
+            <!-- =================================================
+                 RIGHT FORM
+            ================================================== -->
+
+            <section class="form-card">
+
+
+                <div class="form-header">
+
+                    <h2>
+                        Candidate registration
+                    </h2>
+
+                    <p>
+                        Enter your details exactly as provided
+                        by your examination coordinator.
+                    </p>
+
+                </div>
+
+
+
+                <div class="form-body">
+
+
+                    <form
+                        method="POST"
+                        id="registerForm">
+
+
+                        <!-- =====================================
+                             PERSONAL INFORMATION
+                        ====================================== -->
+
+                        <div class="section-heading">
+
+                            <div class="section-number">
+                                01
+                            </div>
+
+                            <h3>
+                                Personal information
+                            </h3>
+
+                        </div>
+
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="name">
+
+                                Full name
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Enter your full name"
+                                autocomplete="name"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+
+                                Email address
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email address"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="password">
+
+                                Password
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a password"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             IDENTITY VERIFICATION
+                        ====================================== -->
+
+                        <div class="camera-section">
+
+
+                            <div class="section-heading">
+
+                                <div class="section-number">
+                                    02
+                                </div>
+
+                                <h3>
+                                    Identity verification
+                                </h3>
+
+                            </div>
+
+
+                            <p class="camera-description">
+
+                                Position your face inside the
+                                frame and capture a clear photo
+                                for examination verification.
+
+                            </p>
+
+
+
+                            <!-- CAMERA -->
+
+                            <div class="camera-container">
+
+
+                                <video
+                                    id="camera"
+                                    autoplay
+                                    playsinline>
+                                </video>
+
+
+                                <div class="camera-overlay">
+                                </div>
+
+
+                                <div class="camera-corner tl">
+                                </div>
+
+                                <div class="camera-corner tr">
+                                </div>
+
+                                <div class="camera-corner bl">
+                                </div>
+
+                                <div class="camera-corner br">
+                                </div>
+
+
+                                <div class="camera-status">
+
+                                    <span
+                                        class="camera-status-dot">
+                                    </span>
+
+                                    Camera preview
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- CAMERA ACTIONS -->
+
+                            <div class="camera-actions">
+
+
+                                <button
+                                    type="button"
+                                    id="startCamera">
+
+                                    Start camera
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    id="capturePhoto"
+                                    disabled>
+
+                                    Capture photo
+
+                                </button>
+
+
+                            </div>
+
+
+
+                            <canvas
+                                id="canvas">
+                            </canvas>
+
+
+
+                            <!-- PREVIEW -->
+
+                            <div
+                                class="preview-wrapper"
+                                id="previewWrapper">
+
+
+                                <div class="preview-title">
+
+                                    <span></span>
+
+                                    Captured photo
+
+                                </div>
+
+
+                                <img
+                                    id="preview"
+                                    alt="Captured candidate photo"
+                                >
+
+                            </div>
+
+
+
+                            <p
+                                id="photoStatus">
+                            </p>
+
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             SECURITY
+                        ====================================== -->
+
+                        <div class="security-note">
+
+                            <div class="security-icon">
+                                🛡
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Verification required
+                                </strong>
+
+                                <br>
+
+                                Make sure your face is clearly
+                                visible and well lit before
+                                capturing the photo.
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             REGISTER
+                        ====================================== -->
+
+                        <button
+                            type="submit"
+                            id="registerButton"
+                            disabled>
+
+                            Create ExamGuard Account
+
+                        </button>
+
+
+                    </form>
+
+
+
+                    <div class="footer-text">
+
+                        ExamGuard • Secure Examination System
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
 
 
 <script>
 
 
-    // ----------------------------------------
-    // Get HTML elements
-    // ----------------------------------------
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
 
     const video =
-        document.getElementById("camera");
+        document.getElementById(
+            "camera"
+        );
+
 
     const canvas =
-        document.getElementById("canvas");
+        document.getElementById(
+            "canvas"
+        );
+
 
     const preview =
-        document.getElementById("preview");
+        document.getElementById(
+            "preview"
+        );
+
+
+    const previewWrapper =
+        document.getElementById(
+            "previewWrapper"
+        );
+
 
     const startCameraButton =
-        document.getElementById("startCamera");
+        document.getElementById(
+            "startCamera"
+        );
+
 
     const captureButton =
-        document.getElementById("capturePhoto");
+        document.getElementById(
+            "capturePhoto"
+        );
+
 
     const registerButton =
-        document.getElementById("registerButton");
+        document.getElementById(
+            "registerButton"
+        );
+
 
     const photoStatus =
-        document.getElementById("photoStatus");
+        document.getElementById(
+            "photoStatus"
+        );
 
-    const password =
-        document.getElementById("password");
-
-    const togglePassword =
-        document.getElementById("togglePassword");
-
-
-    // Store camera stream
 
     let cameraStream = null;
 
 
-    // ----------------------------------------
-    // SHOW / HIDE PASSWORD
-    // ----------------------------------------
 
-    togglePassword.addEventListener(
-        "click",
-        function () {
+    /* =====================================================
+       START CAMERA
+    ===================================================== */
 
-            if (password.type === "password") {
-
-                password.type = "text";
-
-                togglePassword.classList.remove(
-                    "fa-eye"
-                );
-
-                togglePassword.classList.add(
-                    "fa-eye-slash"
-                );
-
-            }
-
-            else {
-
-                password.type = "password";
-
-                togglePassword.classList.remove(
-                    "fa-eye-slash"
-                );
-
-                togglePassword.classList.add(
-                    "fa-eye"
-                );
-
-            }
-
-        }
-    );
-
-
-    // ----------------------------------------
-    // START CAMERA
-    // ----------------------------------------
 
     startCameraButton.addEventListener(
         "click",
         async function () {
 
+
             try {
 
-                // Ask browser for camera permission
 
                 cameraStream =
-                    await navigator.mediaDevices.getUserMedia({
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia({
 
-                        video: true
+                            video: true
 
-                    });
+                        });
 
-
-                // Show camera inside video element
 
                 video.srcObject =
                     cameraStream;
 
 
-                // Enable capture button
-
                 captureButton.disabled =
                     false;
 
 
+                startCameraButton.textContent =
+                    "Camera active";
+
+
+                startCameraButton.style.background =
+                    "#15803d";
+
+
                 photoStatus.textContent =
-                    "Camera started. Position your face and click Capture Photo.";
+                    "Camera ready. Position your face inside the frame.";
+
+
+                photoStatus.style.color =
+                    "#6b7280";
+
 
             }
 
 
             catch (error) {
 
-                console.error(error);
+
+                console.error(
+                    error
+                );
 
 
                 photoStatus.textContent =
-                    "Unable to access camera. Please allow camera permission.";
+                    "Unable to access camera. Please allow camera permission and try again.";
+
+
+                photoStatus.style.color =
+                    "#dc2626";
 
             }
 
@@ -322,31 +2050,53 @@
     );
 
 
-    // ----------------------------------------
-    // CAPTURE PHOTO
-    // ----------------------------------------
+
+    /* =====================================================
+       CAPTURE PHOTO
+    ===================================================== */
+
 
     captureButton.addEventListener(
         "click",
         function () {
 
 
-            // Set canvas size same as camera
+            if (
+                !video.videoWidth ||
+                !video.videoHeight
+            ) {
+
+
+                photoStatus.textContent =
+                    "Camera is not ready yet. Please wait.";
+
+
+                photoStatus.style.color =
+                    "#dc2626";
+
+
+                return;
+
+            }
+
+
+
+            /* ---------------------------------------------
+               CANVAS
+            --------------------------------------------- */
+
 
             canvas.width =
                 video.videoWidth;
+
 
             canvas.height =
                 video.videoHeight;
 
 
-            // Get canvas drawing context
-
             const context =
                 canvas.getContext("2d");
 
-
-            // Copy video frame to canvas
 
             context.drawImage(
                 video,
@@ -357,113 +2107,201 @@
             );
 
 
-            // Display captured image
+
+            /* ---------------------------------------------
+               PREVIEW
+            --------------------------------------------- */
+
 
             const imageData =
-                canvas.toDataURL("image/jpeg");
+                canvas.toDataURL(
+                    "image/jpeg"
+                );
 
 
             preview.src =
                 imageData;
 
 
-            preview.style.display =
+            previewWrapper.style.display =
                 "block";
 
 
             photoStatus.textContent =
-                "Photo captured. Saving...";
+                "Photo captured. Saving securely...";
 
 
-            // Convert canvas image
-            // into Blob
+            photoStatus.style.color =
+                "#16a34a";
+
+
+
+            /* ---------------------------------------------
+               BLOB
+            --------------------------------------------- */
+
 
             canvas.toBlob(
                 async function (blob) {
 
 
-                    // Create form data
-
-                    const formData =
-                        new FormData();
+                    try {
 
 
-                    // Add photo
-
-                    formData.append(
-                        "photo",
-                        blob,
-                        "candidate.jpg"
-                    );
+                        const formData =
+                            new FormData();
 
 
-                    // Send photo to Flask
-
-                    const response =
-                        await fetch(
-                            "/capture-photo",
-                            {
-                                method: "POST",
-                                body: formData
-                            }
+                        formData.append(
+                            "photo",
+                            blob,
+                            "candidate.jpg"
                         );
 
 
-                    // Convert response to JSON
 
-                    const result =
-                        await response.json();
-
-
-                    // Check result
-
-                    if (result.success) {
+                        /* ---------------------------------
+                           SEND TO SERVER
+                        --------------------------------- */
 
 
-                        photoStatus.textContent =
-                            "Photo captured successfully!";
+                        const response =
+                            await fetch(
+                                "/capture-photo",
+                                {
+
+                                    method: "POST",
+
+                                    body: formData
+
+                                }
+                            );
 
 
-                        // Enable Register button
 
-                        registerButton.disabled =
-                            false;
+                        const result =
+                            await response.json();
 
 
-                        // Stop camera
 
-                        if (cameraStream) {
+                        /* ---------------------------------
+                           SUCCESS
+                        --------------------------------- */
 
-                            cameraStream
-                                .getTracks()
-                                .forEach(
-                                    function(track) {
 
-                                        track.stop();
+                        if (
+                            result.success
+                        ) {
 
-                                    }
-                                );
+
+                            photoStatus.textContent =
+                                "✓ Photo captured successfully. You can now register.";
+
+
+                            photoStatus.style.color =
+                                "#16a34a";
+
+
+                            registerButton.disabled =
+                                false;
+
+
+                            captureButton.textContent =
+                                "Photo captured";
+
+
+                            captureButton.style.background =
+                                "#dcfce7";
+
+
+                            captureButton.style.color =
+                                "#166534";
+
+
+                            captureButton.style.borderColor =
+                                "#86efac";
+
+
+
+                            /* STOP CAMERA */
+
+                            if (
+                                cameraStream
+                            ) {
+
+
+                                cameraStream
+                                    .getTracks()
+                                    .forEach(
+                                        function(track) {
+
+                                            track.stop();
+
+                                        }
+                                    );
+
+                            }
+
+
+                            video.style.opacity =
+                                "0.85";
+
+
+                        }
+
+
+                        /* ---------------------------------
+                           FAILURE
+                        --------------------------------- */
+
+
+                        else {
+
+
+                            photoStatus.textContent =
+                                "Photo capture failed. Please try again.";
+
+
+                            photoStatus.style.color =
+                                "#dc2626";
+
+
+                            registerButton.disabled =
+                                true;
 
                         }
 
                     }
 
-                    else {
+
+                    catch (error) {
+
+
+                        console.error(
+                            error
+                        );
 
 
                         photoStatus.textContent =
-                            "Photo capture failed.";
+                            "Unable to save photo. Please try again.";
+
+
+                        photoStatus.style.color =
+                            "#dc2626";
 
                     }
 
 
                 },
 
-                "image/jpeg"
+                "image/jpeg",
+
+                0.9
 
             );
 
         }
+
     );
 
 
