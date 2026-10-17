@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ExamGuard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span class="logo-dot"></span> ExamGuard
+        </div>
+        <div class="navbar-links">
+            {% block nav_links %}{% endblock %}
+        </div>
+    </header>
+
+    <main class="{% block main_class %}page{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block content_scripts %}{% endblock %}
+
+</body>
+</html>

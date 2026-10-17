@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamGuard - Session Review</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 24px;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        h1, h2 {
+            color: #243447;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #00000010;
+            overflow-wrap: anywhere;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        .report {
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .muted {
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>ExamGuard Reviewer Dashboard</h1>
+
+    <p>
+        <strong>Candidate ID:</strong>
+        {{ summary.candidate_id }}
+    </p>
+
+    <p>
+        <strong>Session ID:</strong>
+        {{ summary.session_id }}
+    </p>
+
+    <div class="card">
+        <h2>Integrity Summary</h2>
+
+        <div class="grid">
+            <div>
+                <p class="muted">Integrity Score</p>
+                <div class="value">
+                    {{ summary.integrity_score.integrity_score }}
+                </div>
+            </div>
+
+            <div>
+                <p class="muted">Risk Level</p>
+                <div class="value">
+                    {{ summary.integrity_score.risk_level }}
+                </div>
+            </div>
+
+            <div>
+                <p class="muted">Event Penalty</p>
+                <div class="value">
+                    {{ summary.integrity_score.event_penalty }}
+                </div>
+            </div>
+
+            <div>
+                <p class="muted">Face Presence</p>
+                <div class="value">
+                    {{ summary.integrity_score.face_presence_ratio }}%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Incident History</h2>
+
+        {% if summary.incidents %}
+        <table>
+            <tr>
+                <th>Event</th>
+                <th>Description</th>
+                <th>Severity</th>
+                <th>Time</th>
+            </tr>
+
+            {% for incident in summary.incidents %}
+            <tr>
+                <td>{{ incident.event_type }}</td>
+                <td>{{ incident.description }}</td>
+                <td>{{ incident.severity }}</td>
+                <td>{{ incident.event_time }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No incidents recorded for this session.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Alerts</h2>
+
+        {% if summary.alerts %}
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Created</th>
+            </tr>
+
+            {% for alert in summary.alerts %}
+            <tr>
+                <td>{{ alert.alert_type }}</td>
+                <td>{{ alert.message }}</td>
+                <td>{{ alert.severity }}</td>
+                <td>{{ alert.status }}</td>
+                <td>{{ alert.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No alerts recorded for this session.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Evidence Records</h2>
+
+        {% if summary.evidence %}
+        <table>
+            <tr>
+                <th>Evidence ID</th>
+                <th>Type</th>
+                <th>Filename</th>
+                <th>SHA-256</th>
+                <th>Created</th>
+            </tr>
+
+            {% for item in summary.evidence %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.evidence_type }}</td>
+                <td>{{ item.filename }}</td>
+                <td>{{ item.sha256_hash }}</td>
+                <td>{{ item.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No evidence records found.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>AI Integrity Report</h2>
+
+        {% if summary.ai_report %}
+        <p class="muted">
+            Generated:
+            {{ summary.ai_report.created_at }}
+        </p>
+
+        <div class="report">{{ summary.ai_report.report }}</div>
+        {% else %}
+        <p>No AI report is available for this session.</p>
+        {% endif %}
+    </div>
+
+    <p class="muted">
+        This dashboard supports human review. Recorded events and
+        risk classifications do not independently establish misconduct.
+    </p>
+
+</body>
+</html>

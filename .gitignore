@@ -1,5 +1,9 @@
 .env
 __pycache__/
 *.pyc
-database/*.db
+.venv/
+venv/
+env/
+*.db
+.env
 static/uploads/*

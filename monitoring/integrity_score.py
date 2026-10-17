@@ -1,7 +1,7 @@
 from datetime import datetime
 from database import get_db
 import sys
-
+import pandas as pd
 
 # ============================================================
 # 1. EVENT WEIGHTS
@@ -74,28 +74,20 @@ def get_browser_events(candidate_id, session_id):
 # 3. CALCULATE EVENT PENALTY
 # ============================================================
 
+MAX_PER_TYPE = 5   # one noisy event type can't wipe out the whole score
+
 def calculate_event_penalty(browser_events):
-    """
-    Calculate total penalty from browser events.
+    if not browser_events:
+        return 0
 
-    Each event gets its penalty from EVENT_WEIGHTS.
-    Unknown events receive 0 penalty.
-    """
+    counts = pd.DataFrame(browser_events)["event_type"].value_counts()
 
-    total_penalty = 0
+    unknown = set(counts.index) - set(EVENT_WEIGHTS)
+    if unknown:
+        print("WARNING: event types with no weight (0 penalty):", unknown)
 
-    for event in browser_events:
-
-        event_type = event["event_type"]
-
-        penalty = EVENT_WEIGHTS.get(
-            event_type,
-            0
-        )
-
-        total_penalty += penalty
-
-    return total_penalty
+    capped = counts.clip(upper=MAX_PER_TYPE)
+    return int(sum(n * EVENT_WEIGHTS.get(t, 0) for t, n in capped.items()))
 
 
 # ============================================================
