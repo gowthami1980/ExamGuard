@@ -522,18 +522,22 @@ def log_browser_event():
         
         print("rule_results:", rule_results)
         
+        
         if rule_results:
-            create_incident(candidate_id = candidate_id,
-                            session_id= exam_session_id,
-                            event_type=rule_results["event_type"],
-                            description=rule_results["description"],
-                            severity=rule_results["severity"]
-                            )
-            create_alert(candidate_id = candidate_id,
-                         session_id= exam_session_id,
-                         alert_type=rule_results["event_type"],
-                         message=rule_results["description"],
-                         severity=rule_results["severity"]
+            create_incident(
+                candidate_id=candidate_id,
+                session_id=exam_session_id,
+                event_type=rule_results["event_type"],
+                description=rule_results["reason"],
+                severity=rule_results["severity"]
+            )
+
+            create_alert(
+                candidate_id=candidate_id,
+                session_id=exam_session_id,
+                alert_type=rule_results["event_type"],
+                message=rule_results["reason"],
+                severity=rule_results["severity"]
             )
 
             screenshot_required = True

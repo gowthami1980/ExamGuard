@@ -1617,13 +1617,51 @@
                     body: formData
                 });
 
-                const data = await response.json();
+               
+const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(
-                        data.message || "Face monitoring request failed."
-                    );
-                }
+if (!response.ok) {
+    throw new Error(
+        data.message || "Face monitoring request failed."
+    );
+}
+
+// Save a camera frame as evidence when a face is detected.
+// Limit uploads to once every 30 seconds.
+if (data.state === "face_detected") {
+    const now = Date.now();
+
+    if (!window.lastEvidenceUpload ||
+        now - window.lastEvidenceUpload >= 30000) {
+
+        window.lastEvidenceUpload = now;
+
+        const image = canvas.toDataURL("image/jpeg", 0.85);
+
+        fetch("/upload-evidence", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ image: image })
+        })
+        .then(async response => {
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || "Evidence upload failed."
+                );
+            }
+
+            console.log("Camera evidence saved:", result.sha256_hash);
+        })
+        .catch(error => {
+            console.error("Evidence upload error:", error);
+        });
+    }
+}
+
 
                 if (data.state === "face_detected") {
                     faceStatus.innerText = "Detected";
