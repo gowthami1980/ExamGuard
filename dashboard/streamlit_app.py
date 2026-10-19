@@ -217,14 +217,33 @@ def sessions_tab():
                          width="stretch", hide_index=True)
 
         e1, e2 = st.columns(2)
+        
         with e1:
             st.markdown("#### Event counts")
-            browser = logs[(logs["source"] == "browser")]
-            counts = browser["event_type"].value_counts()
-            if counts.empty:
-                st.caption("No browser events.")
-            else:
-                st.bar_chart(counts)
+            browser = logs[logs["source"] == "browser"]
+
+            event_categories = [
+                "answer_saved",
+                "answer_selected",
+                "copy_attempt",
+                "exam_completed",
+                "exam_started",
+                "focus_gained",
+                "focus_lost",
+                "keyboard_activity",
+                "mouse_activity",
+                "paste_attempt",
+                "tab_return",
+                "tab_switch",
+            ]
+
+            counts = (
+                browser["event_type"]
+                .value_counts()
+                .reindex(event_categories, fill_value=0)
+            )
+
+            st.bar_chart(counts)
         with e2:
             st.markdown("#### Face-absent intervals")
             face = logs[logs["source"] == "face"][
@@ -240,18 +259,38 @@ def sessions_tab():
             st.dataframe(timeline, width="stretch", hide_index=True)
 
         # ---- evidence
+
         st.markdown("#### Evidence")
         evidence = ex.load_evidence_meta(sid)
+
         if evidence.empty:
             st.caption("No screenshots stored for this session.")
         else:
-            cols = st.columns(3)
-            for i, e in enumerate(evidence.itertuples()):
-                data = ex.load_evidence_bytes(e.id)
-                with cols[i % 3]:
-                    if data:
-                        st.image(data, caption=f"{str(e.created_at)[:19]}")
-                    st.caption(f"SHA-256: `{e.sha256_hash[:16]}…`")
+            evidence_items = list(evidence.itertuples())
+
+            selected_index = st.selectbox(
+                "Select captured evidence",
+                range(len(evidence_items)),
+                format_func=lambda i: (
+                    f"{str(evidence_items[i].created_at)[:19]} "
+                    f"— Evidence {i + 1}"
+                ),
+                key=f"evidence_select_{sid}",
+            )
+
+            selected_evidence = evidence_items[selected_index]
+            data = ex.load_evidence_bytes(selected_evidence.id)
+
+            if data:
+                st.image(data, caption="Captured evidence", width="stretch")
+                st.caption(
+                    f"Captured at: {str(selected_evidence.created_at)[:19]}"
+                )
+                st.caption(
+                    f"SHA-256: `{selected_evidence.sha256_hash}`"
+                )
+            else:
+                st.warning("Unable to load this evidence image.")
 
         # ---- per-session export
         st.markdown("#### Export this session")
