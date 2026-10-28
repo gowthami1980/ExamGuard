@@ -282,7 +282,7 @@ def sessions_tab():
             data = ex.load_evidence_bytes(selected_evidence.id)
 
             if data:
-                st.image(data, caption="Captured evidence", width="stretch")
+                st.image(data, caption="Captured evidence", width=350)
                 st.caption(
                     f"Captured at: {str(selected_evidence.created_at)[:19]}"
                 )
